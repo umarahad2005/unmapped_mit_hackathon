@@ -1,0 +1,91 @@
+/* Dashboard Page */
+.main { min-height: 100vh; background: var(--bg-base); }
+
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: var(--space-md) 0; background: rgba(10, 14, 23, 0.85);
+  backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-subtle);
+}
+
+.navInner {
+  max-width: var(--container-max); margin: 0 auto; padding: 0 var(--space-lg);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.logo { display: flex; align-items: center; gap: var(--space-sm); text-decoration: none; }
+.logoText { font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; letter-spacing: 0.05em; color: var(--text-primary); }
+
+.navCenter { position: absolute; left: 50%; transform: translateX(-50%); }
+.dashLabel { font-family: var(--font-mono); font-size: 0.82rem; color: var(--primary-400); font-weight: 600; }
+
+.navLinks { display: flex; align-items: center; gap: var(--space-md); }
+.navLink { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; }
+
+.countryToggle { display: flex; gap: var(--space-xs); background: var(--bg-glass); border-radius: var(--radius-md); padding: 3px; }
+.countryBtn {
+  padding: 6px 14px; font-size: 0.82rem; font-weight: 600;
+  border-radius: var(--radius-sm); color: var(--text-muted); transition: all var(--transition-fast);
+}
+.countryBtn:hover { color: var(--text-secondary); }
+.countryBtnActive { background: var(--primary-500); color: white; }
+
+.content {
+  max-width: var(--container-max); margin: 0 auto;
+  padding: calc(var(--nav-height) + var(--space-xl)) var(--space-lg) var(--space-4xl);
+}
+
+.header { margin-bottom: var(--space-xl); }
+.headerTitle { font-family: var(--font-display); font-size: 2rem; font-weight: 800; }
+.headerSub { font-size: 0.9rem; color: var(--text-muted); margin-top: var(--space-xs); }
+
+/* Stats Grid */
+.statsGrid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.statCard { padding: var(--space-lg); text-align: center; }
+.statValue {
+  font-family: var(--font-display); font-size: 1.8rem; font-weight: 800;
+  background: var(--gradient-primary); -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; background-clip: text;
+}
+.statLabel { font-size: 0.78rem; color: var(--text-muted); margin-top: var(--space-xs); }
+.statChange { font-size: 0.82rem; font-weight: 700; margin-top: 2px; }
+
+/* Charts */
+.chartsRow { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); margin-bottom: var(--space-lg); }
+.chartCard { padding: var(--space-xl); }
+.chartCard h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: var(--space-xs); }
+.chartHint { font-size: 0.75rem; color: var(--primary-400); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-md); }
+.chartContainer { height: 280px; position: relative; }
+
+/* Tables */
+.tableCard { padding: var(--space-xl); margin-bottom: var(--space-lg); }
+.tableCard h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: var(--space-xs); }
+.tableContainer { overflow-x: auto; margin-top: var(--space-md); }
+
+.table { width: 100%; border-collapse: collapse; }
+.table th {
+  text-align: left; padding: var(--space-sm) var(--space-md);
+  font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);
+  border-bottom: 1px solid var(--border-default); letter-spacing: 0.05em;
+}
+.table td {
+  padding: var(--space-sm) var(--space-md); font-size: 0.88rem;
+  border-bottom: 1px solid var(--border-subtle); color: var(--text-secondary);
+}
+.table tr:hover td { background: var(--bg-hover); }
+.cellName { font-weight: 600; color: var(--text-primary); }
+.cellMono { font-family: var(--font-mono); color: var(--primary-400); }
+
+@media (max-width: 1024px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+  .chartsRow { grid-template-columns: 1fr; }
+  .navCenter { display: none; }
+}
+
+@media (max-width: 768px) {
+  .statsGrid { grid-template-columns: 1fr 1fr; }
+  .countryToggle { display: none; }
+}
