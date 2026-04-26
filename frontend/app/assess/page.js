@@ -280,7 +280,7 @@ export default function AssessPage() {
 
   // ─── RENDER: Mirror Test (Card Swipe) ──────
   if (phase === "mirror" && currentCard) {
-    const c = currentCard.card;
+    const c = currentCard.card || { text: "Task data unavailable", complexity: "routine" };
     const complexClass = c.complexity === "expert" ? styles.complexityExpert
       : c.complexity === "complex" ? styles.complexityComplex
       : styles.complexityRoutine;
