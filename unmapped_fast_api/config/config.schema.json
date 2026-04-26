@@ -1,0 +1,154 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UNMAPPED System Configuration",
+  "description": "JSON Schema for validating UNMAPPED country configuration files",
+  "type": "object",
+  "required": ["meta", "language", "taxonomy", "labor_data", "automation", "education", "opportunities", "structural_barriers", "wittgenstein", "ui_strings", "feedback"],
+  "additionalProperties": false,
+
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["config_id", "country_code", "context_label", "last_updated"],
+      "properties": {
+        "config_id":     { "type": "string", "minLength": 1 },
+        "country_code":  { "type": "string", "pattern": "^[A-Z]{2}$" },
+        "context_label": { "type": "string", "minLength": 1 },
+        "last_updated":  { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+      }
+    },
+
+    "language": {
+      "type": "object",
+      "required": ["primary", "script_direction", "ui_strings_path"],
+      "properties": {
+        "primary":         { "type": "string", "minLength": 2 },
+        "secondary":       { "type": ["string", "null"] },
+        "script_direction":{ "type": "string", "enum": ["ltr", "rtl"] },
+        "ui_strings_path": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "taxonomy": {
+      "type": "object",
+      "required": ["primary", "fallback", "version", "mapping_table_path"],
+      "properties": {
+        "primary":            { "type": "string", "enum": ["ESCO", "ISCO-08", "ONET"] },
+        "fallback":           { "type": "string", "enum": ["ESCO", "ISCO-08", "ONET"] },
+        "version":            { "type": "string" },
+        "mapping_table_path": { "type": "string" }
+      }
+    },
+
+    "labor_data": {
+      "type": "object",
+      "required": ["wage_source", "sector_growth_source", "data_vintage_year", "staleness_threshold_years", "living_wage_threshold", "currency"],
+      "properties": {
+        "wage_source":               { "type": "string" },
+        "wage_endpoint":             { "type": "string" },
+        "sector_growth_source":      { "type": "string" },
+        "employment_structure_source":{ "type": "string" },
+        "data_vintage_year":         { "type": "integer", "minimum": 2000, "maximum": 2030 },
+        "staleness_threshold_years": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "living_wage_threshold":     { "type": "number", "minimum": 0 },
+        "currency":                  { "type": "string", "minLength": 3, "maxLength": 3 },
+        "regional_label":            { "type": "string" }
+      }
+    },
+
+    "automation": {
+      "type": "object",
+      "required": ["base_scores", "infrastructure_tier", "itu_penetration_rate", "calibration_multiplier"],
+      "properties": {
+        "base_scores":           { "type": "string" },
+        "task_indices":          { "type": "string" },
+        "infrastructure_tier":   { "type": "string", "enum": ["high", "medium", "low", "minimal"] },
+        "itu_penetration_rate":  { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "calibration_multiplier":{ "type": "number", "minimum": 0.0, "exclusiveMaximum": 1.01 }
+      }
+    },
+
+    "education": {
+      "type": "object",
+      "required": ["credential_taxonomy", "hci_score", "level_mapping"],
+      "properties": {
+        "credential_taxonomy":    { "type": "string" },
+        "hci_score":              { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "step_dataset_available": { "type": "boolean" },
+        "level_mapping": {
+          "type": "object",
+          "required": ["primary_complete", "secondary_complete", "technical_vocational", "tertiary"],
+          "properties": {
+            "primary_complete":    { "type": "integer" },
+            "secondary_complete":  { "type": "integer" },
+            "technical_vocational":{ "type": "integer" },
+            "tertiary":            { "type": "integer" }
+          }
+        }
+      }
+    },
+
+    "opportunities": {
+      "type": "object",
+      "required": ["types_enabled", "formal_employment_accessibility"],
+      "properties": {
+        "types_enabled": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["self_employment", "informal_wage", "formal_wage", "gig", "training_pathway", "agricultural_cooperative"]
+          },
+          "minItems": 1
+        },
+        "formal_employment_accessibility": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    },
+
+    "structural_barriers": {
+      "type": "object",
+      "required": ["wbl_score", "gender_mobility_restriction", "gender_workplace_restriction"],
+      "properties": {
+        "wbl_score":                   { "type": "number", "minimum": 0.0, "maximum": 100.0 },
+        "gender_mobility_restriction": { "type": "boolean" },
+        "gender_workplace_restriction":{ "type": "boolean" },
+        "disability_data_available":   { "type": "boolean" }
+      }
+    },
+
+    "wittgenstein": {
+      "type": "object",
+      "required": ["country_iso3", "projection_scenario", "target_years"],
+      "properties": {
+        "country_iso3":        { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "projection_scenario": { "type": "string", "enum": ["SSP1", "SSP2", "SSP3"] },
+        "target_years": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2
+        }
+      }
+    },
+
+    "ui_strings": {
+      "type": "object",
+      "required": [
+        "intake_prompt", "intake_subtext", "intake_placeholder", "continue_button",
+        "mirror_question", "mirror_yes", "mirror_sometimes", "mirror_no",
+        "verification_intro", "feedback_question",
+        "tier_unverified", "tier_recognized", "tier_demonstrated",
+        "confidence_legend_unverified", "confidence_legend_recognized", "confidence_legend_demonstrated",
+        "stale_data_warning", "inaccessible_opportunity"
+      ],
+      "additionalProperties": { "type": "string" }
+    },
+
+    "feedback": {
+      "type": "object",
+      "required": ["contact_method", "checkin_days"],
+      "properties": {
+        "contact_method": { "type": "string", "enum": ["sms", "push", "email"] },
+        "checkin_days":   { "type": "array", "items": { "type": "integer" }, "minItems": 1 }
+      }
+    }
+  }
+}

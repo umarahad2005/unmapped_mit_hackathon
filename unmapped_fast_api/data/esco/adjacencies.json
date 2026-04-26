@@ -1,0 +1,84 @@
+{
+  "source": "ESCO + O*NET co-occurrence (sample)",
+  "seeded_at": "2026-04-26T00:18:34.883911Z",
+  "adjacencies": [
+    {
+      "skill_a": "S5.6.0",
+      "skill_b": "S5.6.1",
+      "relatedness_score": 0.92,
+      "source": "ESCO"
+    },
+    {
+      "skill_a": "S5.6.0",
+      "skill_b": "S5.6.2",
+      "relatedness_score": 0.88,
+      "source": "ESCO"
+    },
+    {
+      "skill_a": "S5.6.0",
+      "skill_b": "S3.2.1",
+      "relatedness_score": 0.65,
+      "source": "ONET"
+    },
+    {
+      "skill_a": "S5.6.0",
+      "skill_b": "S1.2.1",
+      "relatedness_score": 0.45,
+      "source": "ONET"
+    },
+    {
+      "skill_a": "S5.6.1",
+      "skill_b": "S5.6.2",
+      "relatedness_score": 0.85,
+      "source": "ESCO"
+    },
+    {
+      "skill_a": "S1.2.1",
+      "skill_b": "S1.2.3",
+      "relatedness_score": 0.78,
+      "source": "ESCO"
+    },
+    {
+      "skill_a": "S1.2.1",
+      "skill_b": "S6.1.0",
+      "relatedness_score": 0.52,
+      "source": "ONET"
+    },
+    {
+      "skill_a": "S6.1.0",
+      "skill_b": "S6.1.1",
+      "relatedness_score": 0.71,
+      "source": "ESCO"
+    },
+    {
+      "skill_a": "S2.1.0",
+      "skill_b": "S2.1.1",
+      "relatedness_score": 0.83,
+      "source": "ESCO"
+    },
+    {
+      "skill_a": "S3.1.0",
+      "skill_b": "S3.2.1",
+      "relatedness_score": 0.6,
+      "source": "ONET"
+    },
+    {
+      "skill_a": "S3.2.1",
+      "skill_b": "S5.6.0",
+      "relatedness_score": 0.65,
+      "source": "ONET"
+    },
+    {
+      "skill_a": "S1.4.0",
+      "skill_b": "S1.2.1",
+      "relatedness_score": 0.55,
+      "source": "ESCO"
+    },
+    {
+      "skill_a": "S4.1.0",
+      "skill_b": "S1.2.1",
+      "relatedness_score": 0.61,
+      "source": "ONET"
+    }
+  ]
+}

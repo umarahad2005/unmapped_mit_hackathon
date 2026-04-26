@@ -1,0 +1,76 @@
+{
+  "source": "Wittgenstein Centre 2023 SSP2 Scenario (sample)",
+  "seeded_at": "2026-04-26T00:18:34.886181Z",
+  "countries": {
+    "GHA": {
+      "scenario": "SSP2",
+      "projections": [
+        {
+          "year": 2025,
+          "age_group": "20-24",
+          "education_shares": {
+            "no_education": 0.08,
+            "primary": 0.22,
+            "secondary": 0.48,
+            "post_secondary": 0.22
+          }
+        },
+        {
+          "year": 2030,
+          "age_group": "20-24",
+          "education_shares": {
+            "no_education": 0.05,
+            "primary": 0.18,
+            "secondary": 0.52,
+            "post_secondary": 0.25
+          }
+        },
+        {
+          "year": 2035,
+          "age_group": "20-24",
+          "education_shares": {
+            "no_education": 0.03,
+            "primary": 0.14,
+            "secondary": 0.55,
+            "post_secondary": 0.28
+          }
+        }
+      ]
+    },
+    "BGD": {
+      "scenario": "SSP2",
+      "projections": [
+        {
+          "year": 2025,
+          "age_group": "20-24",
+          "education_shares": {
+            "no_education": 0.12,
+            "primary": 0.31,
+            "secondary": 0.44,
+            "post_secondary": 0.13
+          }
+        },
+        {
+          "year": 2030,
+          "age_group": "20-24",
+          "education_shares": {
+            "no_education": 0.08,
+            "primary": 0.26,
+            "secondary": 0.49,
+            "post_secondary": 0.17
+          }
+        },
+        {
+          "year": 2035,
+          "age_group": "20-24",
+          "education_shares": {
+            "no_education": 0.05,
+            "primary": 0.2,
+            "secondary": 0.54,
+            "post_secondary": 0.21
+          }
+        }
+      ]
+    }
+  }
+}

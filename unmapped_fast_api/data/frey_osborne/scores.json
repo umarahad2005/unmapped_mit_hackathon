@@ -1,0 +1,66 @@
+{
+  "source": "Frey & Osborne 2017, Oxford (sample subset)",
+  "seeded_at": "2026-04-26T00:18:34.884718Z",
+  "scores": [
+    {
+      "onet_soc": "49-2011.00",
+      "occupation": "Electrical Equipment Repairers",
+      "probability": 0.67
+    },
+    {
+      "onet_soc": "49-2022.00",
+      "occupation": "Telecommunications Equipment Installers",
+      "probability": 0.58
+    },
+    {
+      "onet_soc": "41-2031.00",
+      "occupation": "Retail Salespersons",
+      "probability": 0.92
+    },
+    {
+      "onet_soc": "43-4051.00",
+      "occupation": "Customer Service Representatives",
+      "probability": 0.55
+    },
+    {
+      "onet_soc": "11-1021.00",
+      "occupation": "General and Operations Managers",
+      "probability": 0.16
+    },
+    {
+      "onet_soc": "43-3031.00",
+      "occupation": "Bookkeeping, Accounting Clerks",
+      "probability": 0.98
+    },
+    {
+      "onet_soc": "45-1011.00",
+      "occupation": "First-Line Supervisors of Farming",
+      "probability": 0.31
+    },
+    {
+      "onet_soc": "45-2041.00",
+      "occupation": "Agricultural Graders and Sorters",
+      "probability": 0.55
+    },
+    {
+      "onet_soc": "47-2061.00",
+      "occupation": "Construction Laborers",
+      "probability": 0.88
+    },
+    {
+      "onet_soc": "47-2111.00",
+      "occupation": "Electricians",
+      "probability": 0.15
+    },
+    {
+      "onet_soc": "25-9099.00",
+      "occupation": "Education Workers",
+      "probability": 0.12
+    },
+    {
+      "onet_soc": "31-1014.00",
+      "occupation": "Nursing Assistants",
+      "probability": 0.4
+    }
+  ]
+}

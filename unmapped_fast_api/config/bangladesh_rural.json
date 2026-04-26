@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "config_id": "bangladesh_rural_v1",
+    "country_code": "BD",
+    "context_label": "Rural Agricultural Economy — Bangladesh",
+    "last_updated": "2026-01-15"
+  },
+
+  "language": {
+    "primary": "bn",
+    "secondary": "en",
+    "script_direction": "ltr",
+    "ui_strings_path": "locales/bn_BD.json"
+  },
+
+  "taxonomy": {
+    "primary": "ISCO-08",
+    "fallback": "ESCO",
+    "version": "2008",
+    "mapping_table_path": "data/isco/bd_credential_mapping.json"
+  },
+
+  "labor_data": {
+    "wage_source": "ILOSTAT",
+    "wage_endpoint": "https://ilostat.ilo.org/api/sdmx/v21/data/DF_KI_ALL_A",
+    "sector_growth_source": "Data360",
+    "employment_structure_source": "ILOSTAT",
+    "data_vintage_year": 2022,
+    "staleness_threshold_years": 3,
+    "living_wage_threshold": 12000,
+    "currency": "BDT",
+    "regional_label": "South Asia"
+  },
+
+  "automation": {
+    "base_scores": "frey_osborne",
+    "task_indices": "ILO_FOW",
+    "infrastructure_tier": "minimal",
+    "itu_penetration_rate": 0.19,
+    "calibration_multiplier": 0.55
+  },
+
+  "education": {
+    "credential_taxonomy": "ISCED_2011",
+    "hci_score": 0.46,
+    "step_dataset_available": false,
+    "level_mapping": {
+      "primary_complete": 1,
+      "secondary_complete": 2,
+      "technical_vocational": 3,
+      "tertiary": 4
+    }
+  },
+
+  "opportunities": {
+    "types_enabled": [
+      "agricultural_cooperative",
+      "self_employment",
+      "informal_wage",
+      "training_pathway"
+    ],
+    "formal_employment_accessibility": 0.18
+  },
+
+  "structural_barriers": {
+    "wbl_score": 49.4,
+    "gender_mobility_restriction": true,
+    "gender_workplace_restriction": false,
+    "disability_data_available": false
+  },
+
+  "wittgenstein": {
+    "country_iso3": "BGD",
+    "projection_scenario": "SSP2",
+    "target_years": [2025, 2030, 2035]
+  },
+
+  "ui_strings": {
+    "intake_prompt": "আপনি কী করেন তা আমাকে বলুন।",
+    "intake_subtext": "আপনার কাজ, আপনি যা তৈরি করেছেন, যে সমস্যাগুলি সমাধান করেছেন তা বর্ণনা করুন। আপনার নিজের ভাষায় বলুন।",
+    "intake_placeholder": "টাইপ করুন বা মাইক্রোফোন ট্যাপ করুন...",
+    "continue_button": "পরবর্তী →",
+    "mirror_question": "এটি কি আপনার কাজের বর্ণনা করে?",
+    "mirror_yes": "হ্যাঁ",
+    "mirror_sometimes": "কখনো কখনো",
+    "mirror_no": "না",
+    "verification_intro": "আসুন আপনার কয়েকটি শক্তিশালী দক্ষতা নিশ্চিত করি।",
+    "feedback_question": "আমরা যে সুযোগের সাথে মিল করেছিলাম তা কি কাজ করেছে?",
+    "feedback_yes": "হ্যাঁ, কাজ হয়েছে",
+    "feedback_partial": "আংশিকভাবে",
+    "feedback_no": "না",
+    "tier_unverified": "অযাচাইকৃত",
+    "tier_recognized": "স্বীকৃত",
+    "tier_demonstrated": "প্রদর্শিত",
+    "confidence_legend_unverified": "স্ব-প্রতিবেদিত — এখনও নিশ্চিত হয়নি",
+    "confidence_legend_recognized": "বাস্তব কাজ স্বীকৃতির মাধ্যমে নিশ্চিত",
+    "confidence_legend_demonstrated": "পরিস্থিতি বা প্রমাণের মাধ্যমে যাচাই করা হয়েছে",
+    "stale_data_warning": "এই তথ্য ৩ বছরের বেশি পুরানো এবং বর্তমান পরিস্থিতি প্রতিফলিত নাও করতে পারে।",
+    "inaccessible_opportunity": "কাঠামোগত বাধা এই সুযোগে প্রবেশাধিকার প্রভাবিত করতে পারে।"
+  },
+
+  "feedback": {
+    "contact_method": "sms",
+    "checkin_days": [30, 90]
+  }
+}

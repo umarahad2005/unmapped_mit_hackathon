@@ -1,0 +1,97 @@
+{
+  "source": "ESCO v1.1.1 (sample subset for UNMAPPED hackathon demo)",
+  "seeded_at": "2026-04-26T00:18:34.883341Z",
+  "skills": [
+    {
+      "id": "S5.6.0",
+      "label": "Electronic equipment repair",
+      "type": "technical",
+      "automation_risk_base": 0.67,
+      "description": "Diagnose and repair malfunctions in electronic devices and systems"
+    },
+    {
+      "id": "S5.6.1",
+      "label": "Electronic component testing",
+      "type": "technical",
+      "automation_risk_base": 0.72,
+      "description": "Test electronic components to identify defects"
+    },
+    {
+      "id": "S5.6.2",
+      "label": "Circuit fault diagnosis",
+      "type": "technical",
+      "automation_risk_base": 0.58,
+      "description": "Identify faults in electrical circuits using diagnostic tools"
+    },
+    {
+      "id": "S1.2.1",
+      "label": "Customer communication",
+      "type": "transferable",
+      "automation_risk_base": 0.3,
+      "description": "Communicate with customers to understand needs and provide solutions"
+    },
+    {
+      "id": "S1.2.3",
+      "label": "Conflict resolution",
+      "type": "transferable",
+      "automation_risk_base": 0.22,
+      "description": "Resolve disputes and complaints in a constructive manner"
+    },
+    {
+      "id": "S6.1.0",
+      "label": "Business operations management",
+      "type": "domain",
+      "automation_risk_base": 0.45,
+      "description": "Manage day-to-day operations of a small business"
+    },
+    {
+      "id": "S6.1.1",
+      "label": "Basic bookkeeping",
+      "type": "technical",
+      "automation_risk_base": 0.81,
+      "description": "Record and track financial transactions"
+    },
+    {
+      "id": "S2.1.0",
+      "label": "Agricultural production oversight",
+      "type": "domain",
+      "automation_risk_base": 0.51,
+      "description": "Supervise agricultural production activities"
+    },
+    {
+      "id": "S2.1.1",
+      "label": "Quality grading of produce",
+      "type": "technical",
+      "automation_risk_base": 0.55,
+      "description": "Assess agricultural products against quality standards"
+    },
+    {
+      "id": "S3.1.0",
+      "label": "Manual materials handling",
+      "type": "technical",
+      "automation_risk_base": 0.62,
+      "description": "Move, load, and manage physical materials safely"
+    },
+    {
+      "id": "S3.2.1",
+      "label": "Electrical wiring",
+      "type": "technical",
+      "automation_risk_base": 0.4,
+      "description": "Install and connect electrical wiring in buildings and equipment"
+    },
+    {
+      "id": "S1.4.0",
+      "label": "Teaching and instruction",
+      "type": "transferable",
+      "automation_risk_base": 0.25,
+      "description": "Explain concepts and facilitate learning for others"
+    },
+    {
+      "id": "S4.1.0",
+      "label": "Basic patient care",
+      "type": "technical",
+      "automation_risk_base": 0.35,
+      "description": "Assist patients with basic daily needs and health monitoring"
+    }
+  ]
+}

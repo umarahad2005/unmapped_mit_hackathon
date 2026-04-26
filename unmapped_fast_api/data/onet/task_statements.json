@@ -1,0 +1,129 @@
+{
+  "source": "O*NET 28.0 (sample subset for UNMAPPED hackathon demo)",
+  "seeded_at": "2026-04-26T00:18:34.881695Z",
+  "task_count": 13,
+  "tasks": [
+    {
+      "task_id": "T-EN-001",
+      "onet_soc": "49-2011.00",
+      "title": "Electrical and Electronics Repairers",
+      "task": "Diagnose malfunctions in electrical equipment using testing instruments.",
+      "taxonomy_skills": [
+        "S5.6.0",
+        "S5.6.1"
+      ]
+    },
+    {
+      "task_id": "T-EN-002",
+      "onet_soc": "49-2011.00",
+      "title": "Electrical and Electronics Repairers",
+      "task": "Replace defective components such as capacitors, resistors, and circuit boards.",
+      "taxonomy_skills": [
+        "S5.6.0"
+      ]
+    },
+    {
+      "task_id": "T-EN-003",
+      "onet_soc": "49-2022.00",
+      "title": "Telecommunications Equipment Installers",
+      "task": "Test circuits and components of malfunctioning equipment to isolate sources of problems.",
+      "taxonomy_skills": [
+        "S5.6.0",
+        "S5.6.2"
+      ]
+    },
+    {
+      "task_id": "T-CS-001",
+      "onet_soc": "41-2031.00",
+      "title": "Retail Salespersons",
+      "task": "Greet customers and determine what each customer wants or needs.",
+      "taxonomy_skills": [
+        "S1.2.1"
+      ]
+    },
+    {
+      "task_id": "T-CS-002",
+      "onet_soc": "43-4051.00",
+      "title": "Customer Service Representatives",
+      "task": "Resolve customers' service or billing complaints by exchanging merchandise or adjusting bills.",
+      "taxonomy_skills": [
+        "S1.2.1",
+        "S1.2.3"
+      ]
+    },
+    {
+      "task_id": "T-BU-001",
+      "onet_soc": "11-1021.00",
+      "title": "General and Operations Managers",
+      "task": "Direct and coordinate activities of businesses or departments concerned with pricing and sales.",
+      "taxonomy_skills": [
+        "S6.1.0"
+      ]
+    },
+    {
+      "task_id": "T-BU-002",
+      "onet_soc": "43-3031.00",
+      "title": "Bookkeeping, Accounting Clerks",
+      "task": "Operate computers programmed with accounting software to record, store, and analyze information.",
+      "taxonomy_skills": [
+        "S6.1.1"
+      ]
+    },
+    {
+      "task_id": "T-AG-001",
+      "onet_soc": "45-1011.00",
+      "title": "First-Line Supervisors of Farming Workers",
+      "task": "Observe and evaluate the work of farming equipment operators and farm workers.",
+      "taxonomy_skills": [
+        "S2.1.0"
+      ]
+    },
+    {
+      "task_id": "T-AG-002",
+      "onet_soc": "45-2041.00",
+      "title": "Graders and Sorters of Agricultural Products",
+      "task": "Examine produce to determine whether size, color, and condition meet established standards.",
+      "taxonomy_skills": [
+        "S2.1.1"
+      ]
+    },
+    {
+      "task_id": "T-CO-001",
+      "onet_soc": "47-2061.00",
+      "title": "Construction Laborers",
+      "task": "Load, unload, and identify building materials, merchandise, and equipment to be moved.",
+      "taxonomy_skills": [
+        "S3.1.0"
+      ]
+    },
+    {
+      "task_id": "T-CO-002",
+      "onet_soc": "47-2111.00",
+      "title": "Electricians",
+      "task": "Connect wires to circuit breakers, transformers, or other components.",
+      "taxonomy_skills": [
+        "S5.6.0",
+        "S3.2.1"
+      ]
+    },
+    {
+      "task_id": "T-ED-001",
+      "onet_soc": "25-9099.00",
+      "title": "Education Workers",
+      "task": "Provide students with opportunities to observe, question, and investigate.",
+      "taxonomy_skills": [
+        "S1.4.0"
+      ]
+    },
+    {
+      "task_id": "T-HC-001",
+      "onet_soc": "31-1014.00",
+      "title": "Nursing Assistants",
+      "task": "Answer patient call signals and determine how to assist them.",
+      "taxonomy_skills": [
+        "S1.2.1",
+        "S4.1.0"
+      ]
+    }
+  ]
+}

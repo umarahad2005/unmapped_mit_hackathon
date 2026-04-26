@@ -1,0 +1,163 @@
+{
+  "checked_at": "2026-04-26T06:34:12.507511Z",
+  "total": 14,
+  "current": 10,
+  "warning": 4,
+  "stale": 0,
+  "datasets": [
+    {
+      "dataset_id": "ilostat_wage_GH",
+      "display_name": "ILO Wage Data \u2014 Ghana",
+      "source": "ILOSTAT",
+      "vintage_year": 2023,
+      "status": "CURRENT",
+      "age_years": 3,
+      "threshold_years": 3,
+      "country_code": "GH",
+      "warning_message": null
+    },
+    {
+      "dataset_id": "ilostat_wage_BD",
+      "display_name": "ILO Wage Data \u2014 Bangladesh",
+      "source": "ILOSTAT",
+      "vintage_year": 2022,
+      "status": "WARNING",
+      "age_years": 4,
+      "threshold_years": 3,
+      "country_code": "BD",
+      "warning_message": "This data is 4 years old (threshold: 3 years). May not reflect current conditions."
+    },
+    {
+      "dataset_id": "wbes_GH",
+      "display_name": "World Bank Enterprise Survey \u2014 Ghana",
+      "source": "World Bank Enterprise Surveys",
+      "vintage_year": 2021,
+      "status": "WARNING",
+      "age_years": 5,
+      "threshold_years": 3,
+      "country_code": "GH",
+      "warning_message": "This data is 5 years old (threshold: 3 years). May not reflect current conditions."
+    },
+    {
+      "dataset_id": "wbes_BD",
+      "display_name": "World Bank Enterprise Survey \u2014 Bangladesh",
+      "source": "World Bank Enterprise Surveys",
+      "vintage_year": 2022,
+      "status": "WARNING",
+      "age_years": 4,
+      "threshold_years": 3,
+      "country_code": "BD",
+      "warning_message": "This data is 4 years old (threshold: 3 years). May not reflect current conditions."
+    },
+    {
+      "dataset_id": "data360_sector_GH",
+      "display_name": "Sector Growth Data \u2014 Ghana",
+      "source": "Data360 / World Bank",
+      "vintage_year": 2023,
+      "status": "CURRENT",
+      "age_years": 3,
+      "threshold_years": 3,
+      "country_code": "GH",
+      "warning_message": null
+    },
+    {
+      "dataset_id": "data360_sector_BD",
+      "display_name": "Sector Growth Data \u2014 Bangladesh",
+      "source": "Data360 / World Bank",
+      "vintage_year": 2022,
+      "status": "WARNING",
+      "age_years": 4,
+      "threshold_years": 3,
+      "country_code": "BD",
+      "warning_message": "This data is 4 years old (threshold: 3 years). May not reflect current conditions."
+    },
+    {
+      "dataset_id": "frey_osborne_scores",
+      "display_name": "Automation Probability Scores",
+      "source": "Frey & Osborne (Oxford)",
+      "vintage_year": 2017,
+      "status": "CURRENT",
+      "age_years": 9,
+      "threshold_years": 10,
+      "country_code": "GLOBAL",
+      "warning_message": null
+    },
+    {
+      "dataset_id": "ilo_fow_task_indices",
+      "display_name": "ILO Task Content Indices",
+      "source": "ILO Future of Work",
+      "vintage_year": 2021,
+      "status": "CURRENT",
+      "age_years": 5,
+      "threshold_years": 5,
+      "country_code": "GLOBAL",
+      "warning_message": null
+    },
+    {
+      "dataset_id": "itu_digital_development",
+      "display_name": "ITU Digital Connectivity Data",
+      "source": "ITU Digital Development",
+      "vintage_year": 2023,
+      "status": "CURRENT",
+      "age_years": 3,
+      "threshold_years": 3,
+      "country_code": "GLOBAL",
+      "warning_message": null
+    },
+    {
+      "dataset_id": "esco_taxonomy",
+      "display_name": "ESCO Skills Taxonomy v1.1.1",
+      "source": "European Commission / ESCO",
+      "vintage_year": 2023,
+      "status": "CURRENT",
+      "age_years": 3,
+      "threshold_years": 5,
+      "country_code": "GLOBAL",
+      "warning_message": null
+    },
+    {
+      "dataset_id": "onet_task_statements",
+      "display_name": "O*NET Task Statements Database 28.0",
+      "source": "O*NET",
+      "vintage_year": 2024,
+      "status": "CURRENT",
+      "age_years": 2,
+      "threshold_years": 3,
+      "country_code": "GLOBAL",
+      "warning_message": null
+    },
+    {
+      "dataset_id": "wittgenstein_projections",
+      "display_name": "Wittgenstein Education Projections 2025\u20132035",
+      "source": "Wittgenstein Centre for Demography",
+      "vintage_year": 2023,
+      "status": "CURRENT",
+      "age_years": 3,
+      "threshold_years": 7,
+      "country_code": "GLOBAL",
+      "warning_message": null
+    },
+    {
+      "dataset_id": "wbl_dataset",
+      "display_name": "WBL Gender Barrier Dataset",
+      "source": "World Bank Women, Business and the Law",
+      "vintage_year": 2024,
+      "status": "CURRENT",
+      "age_years": 2,
+      "threshold_years": 3,
+      "country_code": "GLOBAL",
+      "warning_message": null
+    },
+    {
+      "dataset_id": "hci_dataset",
+      "display_name": "World Bank Human Capital Index",
+      "source": "World Bank Human Capital Index",
+      "vintage_year": 2024,
+      "status": "CURRENT",
+      "age_years": 2,
+      "threshold_years": 3,
+      "country_code": "GLOBAL",
+      "warning_message": null
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "config_id": "ghana_urban_v1",
+    "country_code": "GH",
+    "context_label": "Urban Informal Economy — Ghana",
+    "last_updated": "2026-01-15"
+  },
+
+  "language": {
+    "primary": "en",
+    "secondary": "tw",
+    "script_direction": "ltr",
+    "ui_strings_path": "locales/en_GH.json"
+  },
+
+  "taxonomy": {
+    "primary": "ESCO",
+    "fallback": "ISCO-08",
+    "version": "1.1.1",
+    "mapping_table_path": "data/esco/gh_credential_mapping.json"
+  },
+
+  "labor_data": {
+    "wage_source": "ILOSTAT",
+    "wage_endpoint": "https://ilostat.ilo.org/api/sdmx/v21/data/DF_KI_ALL_A",
+    "sector_growth_source": "Data360",
+    "employment_structure_source": "ILOSTAT",
+    "data_vintage_year": 2023,
+    "staleness_threshold_years": 3,
+    "living_wage_threshold": 600,
+    "currency": "GHS",
+    "regional_label": "West Africa"
+  },
+
+  "automation": {
+    "base_scores": "frey_osborne",
+    "task_indices": "ILO_FOW",
+    "infrastructure_tier": "low",
+    "itu_penetration_rate": 0.38,
+    "calibration_multiplier": 0.72
+  },
+
+  "education": {
+    "credential_taxonomy": "ISCED_2011",
+    "hci_score": 0.44,
+    "step_dataset_available": true,
+    "level_mapping": {
+      "primary_complete": 1,
+      "secondary_complete": 2,
+      "technical_vocational": 3,
+      "tertiary": 4
+    }
+  },
+
+  "opportunities": {
+    "types_enabled": [
+      "self_employment",
+      "informal_wage",
+      "formal_wage",
+      "gig",
+      "training_pathway"
+    ],
+    "formal_employment_accessibility": 0.41
+  },
+
+  "structural_barriers": {
+    "wbl_score": 67.5,
+    "gender_mobility_restriction": false,
+    "gender_workplace_restriction": false,
+    "disability_data_available": false
+  },
+
+  "wittgenstein": {
+    "country_iso3": "GHA",
+    "projection_scenario": "SSP2",
+    "target_years": [2025, 2030, 2035]
+  },
+
+  "ui_strings": {
+    "intake_prompt": "Tell me what you do.",
+    "intake_subtext": "Describe your work, things you've built, problems you've solved. Use your own words — any language.",
+    "intake_placeholder": "Start typing or tap the microphone...",
+    "continue_button": "Continue →",
+    "mirror_question": "Does this describe your work?",
+    "mirror_yes": "Yes",
+    "mirror_sometimes": "Sometimes",
+    "mirror_no": "No",
+    "verification_intro": "Let's confirm a few of your strongest skills.",
+    "feedback_question": "Did the opportunity we matched you to work out?",
+    "feedback_yes": "Yes, it worked",
+    "feedback_partial": "Partially",
+    "feedback_no": "No",
+    "tier_unverified": "UNVERIFIED",
+    "tier_recognized": "RECOGNIZED",
+    "tier_demonstrated": "DEMONSTRATED",
+    "confidence_legend_unverified": "Self-reported — not yet confirmed",
+    "confidence_legend_recognized": "Confirmed through real task recognition",
+    "confidence_legend_demonstrated": "Verified through scenario or evidence",
+    "stale_data_warning": "This data is more than 3 years old and may not reflect current conditions.",
+    "inaccessible_opportunity": "Structural barriers may affect access to this opportunity."
+  },
+
+  "feedback": {
+    "contact_method": "sms",
+    "checkin_days": [30, 90]
+  }
+}

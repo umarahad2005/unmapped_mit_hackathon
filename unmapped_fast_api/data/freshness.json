@@ -1,0 +1,158 @@
+{
+  "datasets": [
+    {
+      "id": "ilostat_wage_GH",
+      "source": "ILOSTAT",
+      "vintage_year": 2023,
+      "last_ingested": "2026-01-10",
+      "refresh_frequency_months": 12,
+      "staleness_threshold_years": 3,
+      "status": "CURRENT",
+      "display_name": "ILO Wage Data — Ghana",
+      "country_code": "GH"
+    },
+    {
+      "id": "ilostat_wage_BD",
+      "source": "ILOSTAT",
+      "vintage_year": 2022,
+      "last_ingested": "2026-01-10",
+      "refresh_frequency_months": 12,
+      "staleness_threshold_years": 3,
+      "status": "CURRENT",
+      "display_name": "ILO Wage Data — Bangladesh",
+      "country_code": "BD"
+    },
+    {
+      "id": "wbes_GH",
+      "source": "World Bank Enterprise Surveys",
+      "vintage_year": 2021,
+      "last_ingested": "2026-01-10",
+      "refresh_frequency_months": 36,
+      "staleness_threshold_years": 3,
+      "status": "WARNING",
+      "display_name": "World Bank Enterprise Survey — Ghana",
+      "country_code": "GH"
+    },
+    {
+      "id": "wbes_BD",
+      "source": "World Bank Enterprise Surveys",
+      "vintage_year": 2022,
+      "last_ingested": "2026-01-10",
+      "refresh_frequency_months": 36,
+      "staleness_threshold_years": 3,
+      "status": "CURRENT",
+      "display_name": "World Bank Enterprise Survey — Bangladesh",
+      "country_code": "BD"
+    },
+    {
+      "id": "data360_sector_GH",
+      "source": "Data360 / World Bank",
+      "vintage_year": 2023,
+      "last_ingested": "2026-01-10",
+      "refresh_frequency_months": 12,
+      "staleness_threshold_years": 3,
+      "status": "CURRENT",
+      "display_name": "Sector Growth Data — Ghana",
+      "country_code": "GH"
+    },
+    {
+      "id": "data360_sector_BD",
+      "source": "Data360 / World Bank",
+      "vintage_year": 2022,
+      "last_ingested": "2026-01-10",
+      "refresh_frequency_months": 12,
+      "staleness_threshold_years": 3,
+      "status": "CURRENT",
+      "display_name": "Sector Growth Data — Bangladesh",
+      "country_code": "BD"
+    },
+    {
+      "id": "frey_osborne_scores",
+      "source": "Frey & Osborne (Oxford)",
+      "vintage_year": 2017,
+      "last_ingested": "2026-01-05",
+      "refresh_frequency_months": 999,
+      "staleness_threshold_years": 10,
+      "status": "CURRENT",
+      "display_name": "Automation Probability Scores",
+      "country_code": "GLOBAL"
+    },
+    {
+      "id": "ilo_fow_task_indices",
+      "source": "ILO Future of Work",
+      "vintage_year": 2021,
+      "last_ingested": "2026-01-05",
+      "refresh_frequency_months": 24,
+      "staleness_threshold_years": 5,
+      "status": "CURRENT",
+      "display_name": "ILO Task Content Indices",
+      "country_code": "GLOBAL"
+    },
+    {
+      "id": "itu_digital_development",
+      "source": "ITU Digital Development",
+      "vintage_year": 2023,
+      "last_ingested": "2026-01-05",
+      "refresh_frequency_months": 12,
+      "staleness_threshold_years": 3,
+      "status": "CURRENT",
+      "display_name": "ITU Digital Connectivity Data",
+      "country_code": "GLOBAL"
+    },
+    {
+      "id": "esco_taxonomy",
+      "source": "European Commission / ESCO",
+      "vintage_year": 2023,
+      "last_ingested": "2026-01-05",
+      "refresh_frequency_months": 24,
+      "staleness_threshold_years": 5,
+      "status": "CURRENT",
+      "display_name": "ESCO Skills Taxonomy v1.1.1",
+      "country_code": "GLOBAL"
+    },
+    {
+      "id": "onet_task_statements",
+      "source": "O*NET",
+      "vintage_year": 2024,
+      "last_ingested": "2026-01-05",
+      "refresh_frequency_months": 12,
+      "staleness_threshold_years": 3,
+      "status": "CURRENT",
+      "display_name": "O*NET Task Statements Database 28.0",
+      "country_code": "GLOBAL"
+    },
+    {
+      "id": "wittgenstein_projections",
+      "source": "Wittgenstein Centre for Demography",
+      "vintage_year": 2023,
+      "last_ingested": "2026-01-05",
+      "refresh_frequency_months": 60,
+      "staleness_threshold_years": 7,
+      "status": "CURRENT",
+      "display_name": "Wittgenstein Education Projections 2025–2035",
+      "country_code": "GLOBAL"
+    },
+    {
+      "id": "wbl_dataset",
+      "source": "World Bank Women, Business and the Law",
+      "vintage_year": 2024,
+      "last_ingested": "2026-01-05",
+      "refresh_frequency_months": 12,
+      "staleness_threshold_years": 3,
+      "status": "CURRENT",
+      "display_name": "WBL Gender Barrier Dataset",
+      "country_code": "GLOBAL"
+    },
+    {
+      "id": "hci_dataset",
+      "source": "World Bank Human Capital Index",
+      "vintage_year": 2024,
+      "last_ingested": "2026-01-05",
+      "refresh_frequency_months": 12,
+      "staleness_threshold_years": 3,
+      "status": "CURRENT",
+      "display_name": "World Bank Human Capital Index",
+      "country_code": "GLOBAL"
+    }
+  ]
+}
