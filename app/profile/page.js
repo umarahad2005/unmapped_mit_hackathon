@@ -65,14 +65,14 @@ export default function ProfilePage() {
     setFormData(demo);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (destination = '/assess') => {
     setIsProcessing(true);
     // Store in sessionStorage and navigate to results
     const payload = { ...formData, countryCode: country };
     sessionStorage.setItem('unmapped_profile', JSON.stringify(payload));
     
     setTimeout(() => {
-      router.push('/skills');
+      router.push(destination);
     }, 1500);
   };
 
@@ -259,16 +259,16 @@ export default function ProfilePage() {
               </button>
               <button
                 className="btn btn-primary btn-lg"
-                onClick={handleSubmit}
+                onClick={() => handleSubmit('/assess')}
                 disabled={!formData.skillsText || isProcessing}
               >
                 {isProcessing ? (
                   <>
                     <span className={styles.spinner}></span>
-                    Processing Skills...
+                    Preparing Assessment...
                   </>
                 ) : (
-                  "🎯 Map My Skills →"
+                  "🪞 Verify My Skills →"
                 )}
               </button>
             </div>

@@ -9,30 +9,65 @@ export default function SkillsPage() {
   const [results, setResults] = useState(null);
   const [activeTab, setActiveTab] = useState("skills");
   const [isLoading, setIsLoading] = useState(true);
+  const [aiStatus, setAiStatus] = useState("idle"); // idle, loading, success, error
+  const [aiSummary, setAiSummary] = useState("");
   const chartCanvasRef = useRef(null);
   const sectorChartRef = useRef(null);
   const eduChartRef = useRef(null);
 
   useEffect(() => {
+    const defaultInput = {
+      name: "Amara",
+      age: "22",
+      location: "Accra",
+      education: "sss",
+      skillsText: "I repair mobile phones and tablets. I've been doing this since I was 17 — people in my neighborhood bring me broken screens, battery issues, software problems. I speak English, Twi, and some Hausa. I taught myself Python and HTML from YouTube. I also help my aunt sell clothes at Makola Market on weekends. I can negotiate with suppliers and manage inventory.",
+      countryCode: "GHA",
+    };
+
     const stored = sessionStorage.getItem('unmapped_profile');
-    if (stored) {
-      const data = JSON.parse(stored);
-      const processed = processProfile(data);
-      setResults(processed);
-      setIsLoading(false);
-    } else {
-      // Load demo data for Amara
-      const demo = processProfile({
-        name: "Amara",
-        age: "22",
-        location: "Accra",
-        education: "sss",
-        skillsText: "I repair mobile phones and tablets. I've been doing this since I was 17 — people in my neighborhood bring me broken screens, battery issues, software problems. I speak English, Twi, and some Hausa. I taught myself Python and HTML from YouTube. I also help my aunt sell clothes at Makola Market on weekends. I can negotiate with suppliers and manage inventory.",
-        countryCode: "GHA",
+    const inputData = stored ? JSON.parse(stored) : defaultInput;
+
+    // Step 1: Run local pattern matching immediately (fast)
+    const processed = processProfile(inputData);
+    setResults(processed);
+    setIsLoading(false);
+
+    // Step 2: Call Gemini API for enhanced AI extraction (async)
+    setAiStatus("loading");
+    fetch('/api/extract', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        skillsText: inputData.skillsText,
+        countryCode: inputData.countryCode,
+        education: inputData.education,
+      }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.skills) {
+          setAiStatus("success");
+          setAiSummary(data.summary || "");
+          // Merge Gemini skills with existing (avoid duplicates by subcategory)
+          setResults(prev => {
+            const existingSubs = new Set(prev.skills.map(s => s.subcategory));
+            const newSkills = data.skills.filter(s => !existingSubs.has(s.subcategory));
+            const mergedSkills = [...prev.skills, ...newSkills];
+            return {
+              ...prev,
+              skills: mergedSkills,
+              aiSkills: data.skills, // store separately for display
+              aiModel: data.model,
+            };
+          });
+        } else {
+          setAiStatus("error");
+        }
+      })
+      .catch(() => {
+        setAiStatus("error");
       });
-      setResults(demo);
-      setIsLoading(false);
-    }
   }, []);
 
   useEffect(() => {
@@ -238,7 +273,27 @@ export default function SkillsPage() {
                   Risk: {(riskSummary.overall_risk * 100).toFixed(0)}%
                 </span>
               )}
+              {aiStatus === "loading" && (
+                <span className="badge" style={{background: 'rgba(139,92,246,0.15)', color: '#a78bfa', border: '1px solid rgba(139,92,246,0.3)'}}>
+                  ⚡ Gemini AI Extracting...
+                </span>
+              )}
+              {aiStatus === "success" && (
+                <span className="badge" style={{background: 'rgba(16,185,129,0.15)', color: '#34d399', border: '1px solid rgba(16,185,129,0.3)'}}>
+                  ✨ AI Enhanced ({results.aiModel})
+                </span>
+              )}
+              {aiStatus === "error" && (
+                <span className="badge" style={{background: 'rgba(245,158,11,0.15)', color: '#fbbf24', border: '1px solid rgba(245,158,11,0.3)'}}>
+                  ⚠️ AI fallback → local extraction
+                </span>
+              )}
             </div>
+            {aiSummary && (
+              <p style={{fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: 'var(--space-sm)', fontStyle: 'italic'}}>
+                🤖 Gemini: &quot;{aiSummary}&quot;
+              </p>
+            )}
           </div>
         </div>
 

@@ -61,6 +61,7 @@ export default function Home() {
           </div>
           <div className={styles.navLinks}>
             <Link href="/profile" className={styles.navLink}>Map Skills</Link>
+            <Link href="/assess" className={styles.navLink}>Verify Skills</Link>
             <Link href="/dashboard" className={styles.navLink}>Dashboard</Link>
             <Link href="/profile" className={`btn btn-primary btn-sm ${styles.navCta}`}>
               Start Mapping →
