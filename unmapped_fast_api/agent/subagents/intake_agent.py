@@ -118,13 +118,19 @@ class IntakeAgent:
         narrative_hash = hashlib.sha256(narrative.encode()).hexdigest()[:16]
 
         # ── Step 2: Save BEFORE API call (offline-first mandate) ────────────
-        self.storage.save(session_id, "narrative", {
-            "text":           narrative,
+        import os
+        store_raw = os.getenv("UNMAPPED_STORE_NARRATIVE", "0") == "1"
+        narrative_payload = {
             "word_count":     word_count,
             "timestamp":      time.time(),
             "narrative_hash": narrative_hash,
             "config_id":      self.config.meta.config_id,
-        })
+            "stored_raw":     store_raw,
+        }
+        if store_raw:
+            narrative_payload["text"] = narrative
+
+        self.storage.save(session_id, "narrative", narrative_payload)
         logger.info(
             f"Narrative saved locally (session: {session_id}, "
             f"words: {word_count}) — API call starting"

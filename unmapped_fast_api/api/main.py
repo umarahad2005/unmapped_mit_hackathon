@@ -68,9 +68,14 @@ app = FastAPI(
     lifespan    = lifespan,
 )
 
+cors_origins = os.getenv("UNMAPPED_CORS_ORIGINS", "http://localhost:3000").split(",")
+cors_origins = [o.strip() for o in cors_origins if o.strip()]
+if not cors_origins:
+    cors_origins = ["http://localhost:3000"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins  = ["*"],      # In production: restrict to frontend domain
+    allow_origins  = cors_origins,  # In production: set UNMAPPED_CORS_ORIGINS
     allow_methods  = ["*"],
     allow_headers  = ["*"],
 )

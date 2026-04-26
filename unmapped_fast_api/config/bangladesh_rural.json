@@ -21,11 +21,11 @@
   },
 
   "labor_data": {
-    "wage_source": "ILOSTAT",
-    "wage_endpoint": "https://ilostat.ilo.org/api/sdmx/v21/data/DF_KI_ALL_A",
-    "sector_growth_source": "Data360",
+    "wage_source": "WDI",
+    "wage_endpoint": "NY.GDP.PCAP.CD",
+    "sector_growth_source": "SL.UEM.1524.ZS",
     "employment_structure_source": "ILOSTAT",
-    "data_vintage_year": 2022,
+    "data_vintage_year": 2024,
     "staleness_threshold_years": 3,
     "living_wage_threshold": 12000,
     "currency": "BDT",

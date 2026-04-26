@@ -32,7 +32,7 @@ export default function DashboardPage() {
         .catch(() => setBackendSignals(null));
 
       // Also trigger config swap on the backend
-      const configMap = { GHA: 'ghana_urban', IND: 'bangladesh_rural' };
+      const configMap = { GHA: 'ghana_urban', IND: 'india_rural' };
       swapConfig(configMap[country] || 'ghana_urban').catch(() => {});
     }
   }, [country, backendOnline]);

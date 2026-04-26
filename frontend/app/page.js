@@ -22,7 +22,7 @@ export default function Home() {
     if (backendOnline) {
       setSwapStatus('swapping');
       try {
-        const configMap = { GHA: 'ghana_urban', IND: 'bangladesh_rural' };
+        const configMap = { GHA: 'ghana_urban', IND: 'india_rural' };
         await swapConfig(configMap[countryCode] || 'ghana_urban');
         setSwapStatus('success');
         setTimeout(() => setSwapStatus(null), 2000);

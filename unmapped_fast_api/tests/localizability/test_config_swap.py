@@ -78,7 +78,7 @@ class TestLiveConfigSwap:
 
     def test_ghana_labor_source_is_ilostat(self):
         config = load_config("config/ghana_urban.json")
-        assert config.labor_data.wage_source == "ILOSTAT"
+        assert config.labor_data.wage_source == "WDI"
 
     def test_ghana_ui_strings_in_english(self):
         config = load_config("config/ghana_urban.json")

@@ -1,49 +1,49 @@
 {
   "meta": {
-    "config_id": "ghana_urban_v1",
-    "country_code": "GH",
-    "context_label": "Urban Informal Economy — Ghana",
-    "last_updated": "2026-01-15"
+    "config_id": "india_rural_v1",
+    "country_code": "IN",
+    "context_label": "Rural Agricultural Economy — India",
+    "last_updated": "2026-04-26"
   },
 
   "language": {
     "primary": "en",
-    "secondary": "tw",
+    "secondary": "hi",
     "script_direction": "ltr",
-    "ui_strings_path": "locales/en_GH.json"
+    "ui_strings_path": "locales/en_IN.json"
   },
 
   "taxonomy": {
-    "primary": "ESCO",
-    "fallback": "ISCO-08",
-    "version": "1.1.1",
-    "mapping_table_path": "data/esco/gh_credential_mapping.json"
+    "primary": "ISCO-08",
+    "fallback": "ESCO",
+    "version": "2008",
+    "mapping_table_path": "data/isco/in_credential_mapping.json"
   },
 
   "labor_data": {
     "wage_source": "WDI",
     "wage_endpoint": "NY.GDP.PCAP.CD",
     "sector_growth_source": "SL.UEM.1524.ZS",
-    "employment_structure_source": "ILOSTAT",
+    "employment_structure_source": "WDI",
     "data_vintage_year": 2024,
     "staleness_threshold_years": 3,
-    "living_wage_threshold": 600,
-    "currency": "GHS",
-    "regional_label": "West Africa"
+    "living_wage_threshold": 9000,
+    "currency": "INR",
+    "regional_label": "South Asia"
   },
 
   "automation": {
     "base_scores": "frey_osborne",
     "task_indices": "ILO_FOW",
-    "infrastructure_tier": "low",
-    "itu_penetration_rate": 0.38,
-    "calibration_multiplier": 0.72
+    "infrastructure_tier": "medium",
+    "itu_penetration_rate": 0.55,
+    "calibration_multiplier": 0.80
   },
 
   "education": {
     "credential_taxonomy": "ISCED_2011",
-    "hci_score": 0.44,
-    "step_dataset_available": true,
+    "hci_score": 0.49,
+    "step_dataset_available": false,
     "level_mapping": {
       "primary_complete": 1,
       "secondary_complete": 2,
@@ -54,24 +54,23 @@
 
   "opportunities": {
     "types_enabled": [
+      "agricultural_cooperative",
       "self_employment",
       "informal_wage",
-      "formal_wage",
-      "gig",
       "training_pathway"
     ],
-    "formal_employment_accessibility": 0.41
+    "formal_employment_accessibility": 0.22
   },
 
   "structural_barriers": {
-    "wbl_score": 67.5,
+    "wbl_score": 74.4,
     "gender_mobility_restriction": false,
     "gender_workplace_restriction": false,
     "disability_data_available": false
   },
 
   "wittgenstein": {
-    "country_iso3": "GHA",
+    "country_iso3": "IND",
     "projection_scenario": "SSP2",
     "target_years": [2025, 2030, 2035]
   },
@@ -105,3 +104,4 @@
     "checkin_days": [30, 90]
   }
 }
+

@@ -70,60 +70,61 @@ class MatchingResult:
 class EconSignalBuilder:
     """
     Builds the 2 required econometric signals for the youth dashboard.
-    Uses sample data for hackathon; in production, calls ILOSTAT + Data360 APIs.
+    Uses real public datasets (World Bank WDI) with local caching for hackathon;
+    in production, can be swapped to ILOSTAT/Data360 per config.
     """
 
-    # Sample wage data by country
-    WAGE_DATA = {
-        "GH": {"median": 900, "range": "GHS 800–1,400", "currency": "GHS",
-               "sector": "electronics repair", "vintage": 2023, "source": "ILOSTAT"},
-        "BD": {"median": 11000, "range": "BDT 8,000–14,000", "currency": "BDT",
-               "sector": "manufacturing", "vintage": 2022, "source": "ILO South Asia"},
-    }
-
-    GROWTH_DATA = {
-        "GH": {"rate": 0.08, "sector": "Electronics & Repair", "base_year": 2020,
-               "vintage": 2023, "source": "Data360 / World Bank"},
-        "BD": {"rate": 0.06, "sector": "Garments & Textiles", "base_year": 2019,
-               "vintage": 2022, "source": "Data360 / World Bank"},
-    }
-
     def build_wage_signal(self, config: SystemConfig) -> EconSignal:
-        cc    = config.meta.country_code
-        data  = self.WAGE_DATA.get(cc, self.WAGE_DATA["GH"])
-        stale = (2026 - data["vintage"]) > config.labor_data.staleness_threshold_years
+        """
+        Hackathon implementation: uses WDI GDP per capita as an income floor proxy.
+
+        Indicator (default): NY.GDP.PCAP.CD
+        """
+        from core.econ.wdi_client import WdiClient
+
+        indicator = (config.labor_data.wage_endpoint or "NY.GDP.PCAP.CD").strip()
+        point = WdiClient().get_latest_point(config.meta.country_code, indicator)
+        stale = (2026 - point.year) > config.labor_data.staleness_threshold_years
 
         return EconSignal(
-            signal_type   = "WAGE_FLOOR",
-            value         = data["median"],
-            plain_language= (
-                f"Workers in {data['sector']} in your region typically earn "
-                f"between {data['range']} per month."
+            signal_type="INCOME_FLOOR_PROXY",
+            value=point.value,
+            plain_language=(
+                f"Latest GDP per person is about {point.value:,.0f} USD per year "
+                f"(year {point.year}). This is a proxy for local income floor, not a wage contract."
             ),
-            source        = data["source"],
-            vintage_year  = data["vintage"],
-            is_stale      = stale,
-            currency      = data["currency"],
-            period        = "monthly",
+            source=point.source,
+            vintage_year=point.year,
+            is_stale=stale,
+            currency="USD",
+            period="annual",
         )
 
     def build_growth_signal(self, config: SystemConfig) -> EconSignal:
-        cc    = config.meta.country_code
-        data  = self.GROWTH_DATA.get(cc, self.GROWTH_DATA["GH"])
-        stale = (2026 - data["vintage"]) > config.labor_data.staleness_threshold_years
-        direction = "growing" if data["rate"] > 0 else "shrinking"
+        """
+        Hackathon implementation: uses WDI youth unemployment rate.
+
+        Indicator (default): SL.UEM.1524.ZS (Unemployment, youth total (% of total labor force ages 15-24))
+        """
+        from core.econ.wdi_client import WdiClient
+
+        # Reuse the existing config field for portability: wage_endpoint is “signal A”.
+        # Sector growth source is “signal B” (indicator code).
+        indicator = (config.labor_data.sector_growth_source or "SL.UEM.1524.ZS").strip()
+        point = WdiClient().get_latest_point(config.meta.country_code, indicator)
+        stale = (2026 - point.year) > config.labor_data.staleness_threshold_years
 
         return EconSignal(
-            signal_type   = "SECTOR_GROWTH",
-            value         = data["rate"],
-            plain_language= (
-                f"Employment in {data['sector']} in your country has been {direction} "
-                f"({abs(data['rate'])*100:.1f}% change since {data['base_year']})."
+            signal_type="YOUTH_UNEMPLOYMENT_RATE",
+            value=point.value,
+            plain_language=(
+                f"Youth unemployment is {point.value:.1f}% (ages 15–24, year {point.year}). "
+                f"Higher values mean fewer immediate wage opportunities."
             ),
-            source        = data["source"],
-            vintage_year  = data["vintage"],
-            is_stale      = stale,
-            period        = f"{data['base_year']}–2023",
+            source=point.source,
+            vintage_year=point.year,
+            is_stale=stale,
+            period="annual",
         )
 
 

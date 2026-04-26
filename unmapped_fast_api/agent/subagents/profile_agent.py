@@ -56,7 +56,8 @@ class ProfileAgent:
         Synthesize the final portable profile.
         """
         start      = time.monotonic()
-        profile_id = f"UMP-{self.config.meta.country_code}-2026-{str(uuid.uuid4())[:8].upper()}"
+        # Use a longer random suffix to reduce guessability of profile URLs/IDs.
+        profile_id = f"UMP-{self.config.meta.country_code}-2026-{uuid.uuid4().hex[:16].upper()}"
 
         # ── Categorize skills by tier ─────────────────────────────────────────
         all_skills      = verification_result.verified_skills
@@ -110,7 +111,7 @@ class ProfileAgent:
         data_sources = [
             {"name": "ESCO Taxonomy",          "vintage": self.config.taxonomy.version},
             {"name": "O*NET Task Statements",  "vintage": "28.0"},
-            {"name": f"ILOSTAT Wages",
+            {"name": "World Bank WDI (econometric signals)",
              "vintage_year": self.config.labor_data.data_vintage_year},
         ]
 

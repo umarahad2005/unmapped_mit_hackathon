@@ -6,14 +6,25 @@ import { setSession } from "../../../lib/agents/assessment/sessionStore.js";
 
 export async function POST(request) {
   try {
-    const { skillsText, countryCode, education } = await request.json();
+    const { skillsText, countryCode, education, skills } = await request.json();
 
-    if (!skillsText) {
-      return Response.json({ error: "No skills text provided" }, { status: 400 });
+    if (!skillsText && (!skills || skills.length === 0)) {
+      return Response.json({ error: "No skills provided" }, { status: 400 });
     }
 
     // Step 1: Classify skills into domains
-    const classifiedSkills = await classifySkills(skillsText, countryCode);
+    let classifiedSkills;
+    if (skills && skills.length > 0) {
+      classifiedSkills = skills.map(s => ({
+        skill: s.name || s.skill,
+        domain: s.category || s.domain || "unknown",
+        subdomain: s.subcategory || s.subdomain || "unknown",
+        claimedLevel: s.level || "intermediate",
+        isco_codes: s.isco_codes || [],
+      }));
+    } else {
+      classifiedSkills = await classifySkills(skillsText, countryCode);
+    }
 
     // Step 2: Create Mirror Test session (matches skills → task cards)
     const session = createSession(classifiedSkills, countryCode);

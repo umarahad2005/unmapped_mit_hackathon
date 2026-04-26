@@ -4,14 +4,25 @@
 
 import { occupations, lmicCalibration } from '../data/occupations';
 import { educationProjections } from '../data/laborMarket';
+import { getConfig } from './orchestrator';
 
 // Calculate LMIC-adjusted automation risk for a set of occupations
 export function analyzeRisk(mappedOccupations, countryCode) {
-  const calibration = lmicCalibration[countryCode] || { factor: 0.7, digital_penetration: 0.5 };
+  const config = getConfig(countryCode);
+  const calibration = config?.automation_calibration || lmicCalibration[countryCode] || { factor: 0.7, digital_penetration: 0.5 };
+  const factor = calibration.adjustment_factor || calibration.factor || 0.7;
+  
+  const ituRate = calibration.digital_penetration || 0.5;
+  const fineTune = 0.5 + (ituRate * 0.5);
+  let multiplier = factor;
+  if (calibration.infrastructure_level === "low") multiplier = 0.5;
+  if (calibration.infrastructure_level === "medium") multiplier = 0.72;
+  if (calibration.infrastructure_level === "high") multiplier = 0.9;
   
   return mappedOccupations.map(occ => {
     const baseRisk = occ.automation_risk;
-    const adjustedRisk = baseRisk * calibration.factor;
+    let adjustedRisk = baseRisk * multiplier * fineTune;
+    adjustedRisk = Math.max(0.0, Math.min(1.0, adjustedRisk));
     
     // Decompose tasks
     const durableSkills = [];
@@ -61,8 +72,8 @@ export function analyzeRisk(mappedOccupations, countryCode) {
       base_risk: baseRisk,
       lmic_adjusted_risk: Math.round(adjustedRisk * 100) / 100,
       risk_level: riskLevel,
-      calibration_factor: calibration.factor,
-      calibration_note: calibration.notes,
+      calibration_factor: multiplier,
+      calibration_note: calibration.notes || "Adjusted based on global LMIC benchmarks.",
       tasks: {
         routine: occ.tasks_routine,
         cognitive: occ.tasks_cognitive,

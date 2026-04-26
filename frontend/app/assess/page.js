@@ -50,6 +50,7 @@ export default function AssessPage() {
           skillsText: profile.skillsText,
           countryCode: profile.countryCode,
           education: profile.education,
+          skills: profile.skills || profile.aiSkills || [],
         }),
       });
       const data = await res.json();

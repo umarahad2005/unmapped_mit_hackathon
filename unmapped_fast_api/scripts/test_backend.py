@@ -101,6 +101,12 @@ def main():
         keys=["status", "config_id"]
     )
     run(
+        "POST /api/config/swap → india_rural",
+        "POST", "/api/config/swap",
+        body={"config_id": "india_rural"},
+        keys=["status", "config_id"]
+    )
+    run(
         "POST /api/config/swap → ghana_urban (back)",
         "POST", "/api/config/swap",
         body={"config_id": "ghana_urban"},
@@ -116,7 +122,7 @@ def main():
     # ── Econometric signals ───────────────────────────────────────────────────
     print(f"\n{BOLD}Market Signals:{RESET}")
     run(
-        "GET /api/signals/GH — wage + growth signals",
+        "GET /api/signals/GH — 2 econometric signals",
         "GET", "/api/signals/GH",
         keys=["country_code", "signals", "signal_count"]
     )
@@ -134,8 +140,8 @@ def main():
     print(f"\n{BOLD}Mirror Test:{RESET}")
     run(
         "POST /api/mirror/cards — returns card deck",
-        "POST", "/api/mirror/cards?session_id=test001",
-        body=["S5.6.0", "S1.2.1"],
+        "POST", "/api/mirror/cards",
+        body={"session_id": "test001", "skill_ids": ["S5.6.0", "S1.2.1"]},
         keys=["cards", "max_cards", "question"]
     )
     run(
