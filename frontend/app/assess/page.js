@@ -3,11 +3,75 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./assess.module.css";
+import { AlertTriangle } from "../../components/Icons";
 
 const DOMAIN_ICONS = {
   technical: "🔧", digital: "💻", business: "📊",
   agricultural: "🌾", soft: "🤝", catchall: "🔮",
 };
+
+// Inline chevron — Icons.js doesn't export ChevronDown, and we don't modify it.
+const ChevronIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+);
+
+// ─── Confidence-explainer helpers (Track C) ─────────────────
+const PRETTY_LABEL = {
+  evidence_density:     "Narrative evidence",
+  taxonomy_specificity: "Taxonomy match",
+  mirror_confirm_rate:  "Mirror-test confirms",
+  complexity_breadth:   "Complexity coverage",
+  local_prevalence:     "Locally common",
+  learning_source:      "Learning source",
+  micro_verify:         "Scenario verified",
+};
+
+function prettyLabel(key) {
+  return PRETTY_LABEL[key] || key;
+}
+
+function explainComponent(key, _value, skill) {
+  switch (key) {
+    case "mirror_confirm_rate": {
+      const yes = skill?.taskCounts?.yes || 0;
+      const sometimes = skill?.taskCounts?.sometimes || 0;
+      const total = skill?.taskCounts?.total || 0;
+      return `You confirmed ${yes + sometimes} of ${total} cards.`;
+    }
+    case "taxonomy_specificity":
+      return `Skill maps directly to ISCO ${skill?.isco_codes?.[0] || "—"}.`;
+    case "local_prevalence":
+      return "Among the top youth occupations or fastest-growing sectors in this country.";
+    case "evidence_density":
+      return "Multiple supporting phrases in your description.";
+    case "learning_source":
+      return `Source: ${skill?.source || "informal"}.`;
+    case "complexity_breadth":
+      return "Confirmed across routine, complex, and expert tasks.";
+    case "micro_verify":
+      return "Passed scenario verification.";
+    default:
+      return "";
+  }
+}
+
+function topReasons(skill) {
+  const c = skill?.confidenceComponents || {};
+  const w = skill?.confidenceWeights || {};
+  const entries = Object.entries(c)
+    .map(([k, v]) => ({ k, value: v, contribution: v * (w[k] || 0) }))
+    .sort((a, b) => b.contribution - a.contribution)
+    .slice(0, 2);
+  return entries.map((e, idx) => ({
+    label: prettyLabel(e.k),
+    value: `${Math.round(e.value * 100)}%`,
+    explain: explainComponent(e.k, e.value, skill),
+    tone: idx === 0 ? "var(--accent-marigold)" : "var(--accent-forest)",
+  }));
+}
 
 export default function AssessPage() {
   // Phase: loading → overview → mirror → micro_verify → micro_feedback → results → error
@@ -482,6 +546,26 @@ export default function AssessPage() {
                         background: tierColor,
                       }}></div>
                     </div>
+                    <details className={styles.whyConfidence} data-why-confidence={skill.skill}>
+                      <summary className={styles.whySummary}>
+                        <ChevronIcon /> why this score
+                      </summary>
+                      <ul className={styles.whyList}>
+                        {topReasons(skill).map((r) => (
+                          <li key={r.label}>
+                            <span className={styles.whyDot} style={{ background: r.tone }} />
+                            <strong>{r.label}</strong>
+                            <span className={styles.whyValue}>{r.value}</span>
+                            <span className={styles.whyExplain}>{r.explain}</span>
+                          </li>
+                        ))}
+                        {skill.usedGenericFallback && (
+                          <li className={styles.whyWarning}>
+                            <AlertTriangle size={14} /> We don&apos;t have specialised verification cards for this yet — these were general-work questions.
+                          </li>
+                        )}
+                      </ul>
+                    </details>
                     {skill.confirmedTasks?.length > 0 && (
                       <div className={styles.confirmedTasks}>
                         {skill.confirmedTasks.slice(0, 4).map((task, j) => (

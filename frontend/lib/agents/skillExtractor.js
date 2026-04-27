@@ -7,7 +7,11 @@ import { occupations } from '../data/occupations';
 // Comprehensive skill patterns for LMIC contexts
 const skillPatterns = [
   // Technical / Trade skills
-  { patterns: ["repair", "fix", "mend", "troubleshoot"], category: "technical", subcategory: "repair_maintenance" },
+  // Generic "repair" is intentionally ambiguous — it gets matched only when no
+  // disambiguator follows in the narrative. Specific terms (phone, tractor, car,
+  // solar, etc.) are caught by the rows below and route to their own ISCO codes.
+  // Disambiguators are checked at extraction time; see extractSkills().
+  { patterns: ["repair", "fix", "mend", "troubleshoot"], category: "technical", subcategory: "repair_maintenance", isco_codes: [], _ambiguous: true, _disambiguators: ["phone","mobile","tractor","engine","car","motor","solar","electric","electronic","tablet","screen","watch","bicycle","bike"] },
   { patterns: ["phone repair", "mobile repair", "screen replacement", "battery"], category: "technical", subcategory: "electronics_repair", isco_codes: ["7421", "7422"] },
   { patterns: ["computer", "laptop", "desktop repair"], category: "technical", subcategory: "computer_repair", isco_codes: ["7422"] },
   { patterns: ["weld", "welding", "arc welding", "gas welding"], category: "technical", subcategory: "welding", isco_codes: ["7212"] },
@@ -76,13 +80,27 @@ export function extractSkills(inputText) {
   for (const pattern of skillPatterns) {
     for (const keyword of pattern.patterns) {
       if (lower.includes(keyword) && !matchedPatterns.has(pattern.subcategory)) {
+        // Ambiguous "repair" only counts when no specific disambiguator
+        // appears — otherwise the more specific pattern row owns it and
+        // contributes the proper ISCO code.
+        if (pattern._ambiguous && Array.isArray(pattern._disambiguators)) {
+          if (pattern._disambiguators.some(d => lower.includes(d))) {
+            break;
+          }
+        }
         matchedPatterns.add(pattern.subcategory);
-        
+
         // Generate human-readable skill name
         const skillName = pattern.subcategory
           .split('_')
           .map(w => w.charAt(0).toUpperCase() + w.slice(1))
           .join(' ');
+
+        // Bare "repair" with nothing specific: cap confidence at 0.45 so the
+        // matcher routes to generic_unknown rather than borrowing phone_repair.
+        const confidence = pattern._ambiguous
+          ? 0.45
+          : calculateConfidence(lower, pattern);
 
         extractedSkills.push({
           id: `skill_${pattern.subcategory}_${Date.now()}`,
@@ -91,7 +109,7 @@ export function extractSkills(inputText) {
           subcategory: pattern.subcategory,
           source: classifySource(inputText),
           isco_codes: pattern.isco_codes || [],
-          confidence: calculateConfidence(lower, pattern.patterns),
+          confidence,
           matched_keywords: pattern.patterns.filter(p => lower.includes(p)),
         });
         break;
@@ -117,11 +135,26 @@ export function extractSkills(inputText) {
   return extractedSkills;
 }
 
-function calculateConfidence(text, patterns) {
-  const matches = patterns.filter(p => text.includes(p)).length;
-  const base = 0.6;
-  const bonus = Math.min(matches * 0.12, 0.35);
-  return Math.min(base + bonus, 0.98);
+// Confidence is meaningful on [0.30, 0.85] — a 4-digit ISCO row with several
+// keyword hits and a temporal context phrase ("for 5 years", "every day")
+// can clear 0.80; a single bare keyword hit floors near 0.40.
+function calculateConfidence(text, patternRow) {
+  const patterns = Array.isArray(patternRow) ? patternRow : (patternRow?.patterns || []);
+  const iscoCodes = Array.isArray(patternRow) ? [] : (patternRow?.isco_codes || []);
+
+  const distinctMatches = new Set(patterns.filter(p => text.includes(p))).size;
+
+  const base = 0.40;
+  // Specificity bonus only when the pattern row carries a real 4-digit code —
+  // this is how we reward "phone_repair" over a bare "repair_maintenance" hit.
+  const specificityBonus = iscoCodes.some(c => /^\d{4}$/.test(c)) ? 0.20 : 0;
+  const keywordDensity = Math.min(distinctMatches * 0.08, 0.25);
+  // Narrative-anchoring phrases — strong signal the claim is lived, not borrowed.
+  const contextRegex = /(since i was|every day|weekly|for \d+ years|for \w+ years)/;
+  const contextPhrase = contextRegex.test(text) ? 0.10 : 0;
+
+  const total = base + specificityBonus + keywordDensity + contextPhrase;
+  return Math.max(0.30, Math.min(0.85, total));
 }
 
 function extractLanguages(text) {

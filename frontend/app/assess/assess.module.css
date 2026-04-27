@@ -499,3 +499,58 @@
   .swipeButtons { gap: var(--space-sm); }
   .statsRow { gap: var(--space-lg); }
 }
+
+/* ─── Why-confidence expander ─────────────────────── */
+.whyConfidence {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+}
+.whySummary {
+  cursor: pointer;
+  color: var(--ink-medium);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+}
+.whySummary::-webkit-details-marker { display: none; }
+.whyList {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 0;
+  list-style: none;
+}
+.whyList li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--ink-medium);
+}
+.whyDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.whyValue {
+  font-family: var(--font-mono);
+  color: var(--ink-strong);
+  font-weight: 600;
+}
+.whyExplain { color: var(--ink-soft); }
+.whyWarning {
+  background: var(--accent-marigold-soft);
+  border-left: 3px solid var(--accent-marigold);
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  color: #784805;
+  margin-top: 4px;
+}

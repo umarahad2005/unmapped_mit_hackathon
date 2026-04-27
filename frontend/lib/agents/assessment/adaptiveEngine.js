@@ -2,6 +2,7 @@
 // Replaces MCQ quiz with task card recognition + micro-verification
 
 import { matchTasksForSkills } from "../../data/taskBank.js";
+import { laborMarketData } from "../../data/laborMarket.js";
 
 // ─── Evidence Tiers ─────────────────────────────────────────────────
 export const EVIDENCE_TIERS = {
@@ -10,12 +11,169 @@ export const EVIDENCE_TIERS = {
   DEMONSTRATED:  { level: 3, label: "Demonstrated",  color: "#34d399", confidence: [0.85, 0.95] },
 };
 
+// ─── Sector → ISCO major-group mapping (mirrors opportunityMatcher.getSectorISCOGroups) ──
+const SECTOR_TO_MAJOR = {
+  "Agriculture": [6, 9],
+  "Industry": [7, 8],
+  "Manufacturing": [7, 8],
+  "Construction": [7, 9],
+  "Trade & Hospitality": [5, 9],
+  "Transport & Storage": [8],
+  "ICT": [2, 3, 7],
+  "Financial Services": [2, 3, 4],
+  "Education": [2],
+  "Health": [2, 3, 5],
+};
+
+// ─── Pure helpers (deterministic, offline) ──────────────────────────
+function clamp01(x) {
+  if (typeof x !== "number" || Number.isNaN(x)) return 0;
+  if (x < 0) return 0;
+  if (x > 1) return 1;
+  return x;
+}
+
+function round2(x) {
+  return Math.round(x * 100) / 100;
+}
+
+function median(arr) {
+  if (!arr || arr.length === 0) return 0;
+  const sorted = [...arr].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? (sorted[mid - 1] + sorted[mid]) / 2
+    : sorted[mid];
+}
+
+/**
+ * Whether any of the skill's ISCO codes is locally prevalent in the country.
+ * Boost-only signal: returns true/false but never penalises rare skills.
+ */
+function isLocallyPrevalent(iscos, countryCode) {
+  if (!iscos || iscos.length === 0) return false;
+  const data = laborMarketData[countryCode];
+  if (!data) return false;
+
+  // 1. Direct match against top youth occupations (4-digit ISCO).
+  const topYouthCodes = (data.top_occupations_youth || []).map(o => String(o.isco));
+  if (iscos.some(c => topYouthCodes.includes(String(c)))) return true;
+
+  // 2. Major-group prevalence via above-median sector growth.
+  const sectors = data.sectors || [];
+  if (sectors.length === 0) return false;
+  const medianGrowth = median(sectors.map(s => s.growth_rate));
+  const aboveMedianMajors = sectors
+    .filter(s => s.growth_rate >= medianGrowth)
+    .flatMap(s => SECTOR_TO_MAJOR[s.name] || []);
+  return iscos.some(c => {
+    const firstDigit = parseInt(String(c).slice(0, 1), 10);
+    return Number.isFinite(firstDigit) && aboveMedianMajors.includes(firstDigit);
+  });
+}
+
+/**
+ * Compute a continuous, multi-signal confidence score for a skill queue.
+ * Pure function — deterministic, offline-safe. No Math.random / Date.now in math.
+ *
+ * Components & weights (sum = 1.0):
+ *   evidence_density     0.25
+ *   taxonomy_specificity 0.20
+ *   mirror_confirm_rate  0.20
+ *   complexity_breadth   0.15
+ *   local_prevalence     0.10
+ *   learning_source      0.05
+ *   micro_verify         0.05
+ */
+function computeGroundedConfidence(queue, session) {
+  // 1. mirror_confirm_rate — (yes + sometimes×0.5) / total_answered
+  const totalAnswered = queue.cards.filter(c => c.response !== null).length || 1;
+  const confirmedWeight = queue.yesCount + queue.sometimesCount * 0.5;
+  const mirror_confirm_rate = clamp01(confirmedWeight / totalAnswered);
+
+  // 2. complexity_breadth — fraction of complexity tiers with ≥1 confirmation
+  const tiers = [
+    queue.routineConfirmed > 0,
+    queue.complexConfirmed > 0,
+    queue.expertConfirmed > 0,
+  ];
+  const complexity_breadth = tiers.filter(Boolean).length / 3;
+
+  // 3. taxonomy_specificity — 1.0 for any 4-digit ISCO, 0.5 for 3-digit, else 0
+  const iscos = (queue.isco_codes || []).map(c => String(c));
+  const taxonomy_specificity =
+    iscos.some(c => /^\d{4}$/.test(c)) ? 1.0 :
+    iscos.some(c => /^\d{3}$/.test(c)) ? 0.5 :
+    0.0;
+
+  // 4. evidence_density — distinct supporting phrases in narrative, cap 4 → /4
+  const narrative = (session && session.narrative ? session.narrative : "").toLowerCase();
+  const confirmedFirstWords = new Set();
+  for (const card of queue.cards) {
+    if (card.response !== "yes" && card.response !== "sometimes") continue;
+    const cat = (card.category || "").replace(/_/g, " ").trim();
+    if (!cat) continue;
+    const firstWord = cat.split(" ")[0];
+    if (firstWord && narrative.includes(firstWord)) {
+      confirmedFirstWords.add(firstWord);
+    }
+  }
+  const evidence_density = clamp01(Math.min(confirmedFirstWords.size, 4) / 4);
+
+  // 5. local_prevalence — boost-only signal (never negative)
+  const local_prevalence = isLocallyPrevalent(iscos, session && session.countryCode) ? 1.0 : 0.0;
+
+  // 6. learning_source — apprenticeship > work > formal > self-taught > informal > self-reported
+  const sourceMap = {
+    apprenticeship: 1.0,
+    work_experience: 0.9,
+    formal_education: 0.8,
+    self_taught: 0.6,
+    informal_experience: 0.5,
+    self_reported: 0.3,
+  };
+  const learning_source = sourceMap[queue.source] != null ? sourceMap[queue.source] : 0.5;
+
+  // 7. micro_verify — 1.0 pass / 0.0 fail / 0.5 not yet attempted
+  const micro_verify =
+    queue.microVerifyPassed === true  ? 1.0 :
+    queue.microVerifyPassed === false ? 0.0 :
+    0.5;
+
+  const components = {
+    evidence_density,
+    taxonomy_specificity,
+    mirror_confirm_rate,
+    complexity_breadth,
+    local_prevalence,
+    learning_source,
+    micro_verify,
+  };
+  const weights = {
+    evidence_density:     0.25,
+    taxonomy_specificity: 0.20,
+    mirror_confirm_rate:  0.20,
+    complexity_breadth:   0.15,
+    local_prevalence:     0.10,
+    learning_source:      0.05,
+    micro_verify:         0.05,
+  };
+
+  const raw = Object.keys(weights).reduce(
+    (s, k) => s + components[k] * weights[k],
+    0
+  );
+
+  return { score: clamp01(raw), components, weights };
+}
+
 /**
  * Create a Mirror Test session
  * @param {Array} classifiedSkills - Skills from agentRegistry
  * @param {string} countryCode - Country context
+ * @param {string} narrative - The user's free-text skills description (for evidence density)
  */
-export function createSession(classifiedSkills, countryCode) {
+export function createSession(classifiedSkills, countryCode, narrative = "") {
   // Match skills to task card sets
   const taskSets = matchTasksForSkills(classifiedSkills);
 
@@ -34,6 +192,7 @@ export function createSession(classifiedSkills, countryCode) {
       domain: set.domain,
       isco_codes: set.isco_codes,
       claimedLevel: set.claimedLevel,
+      source: set.source,
       // Card state
       cards: sortedTasks.map((task) => ({
         ...task,
@@ -51,6 +210,8 @@ export function createSession(classifiedSkills, countryCode) {
       // Results
       evidenceTier: null,
       confidence: 0,
+      confidenceComponents: null,
+      confidenceWeights: null,
       needsMicroVerify: false,
       microVerifyPassed: null,
     };
@@ -59,6 +220,7 @@ export function createSession(classifiedSkills, countryCode) {
   return {
     id: `mirror_${Date.now()}`,
     countryCode,
+    narrative,
     phase: "mirror", // "mirror" | "micro_verify" | "complete"
     skillQueues,
     currentSkillIndex: 0,
@@ -90,7 +252,7 @@ export function getNextCard(session) {
 
   if (!card) {
     // No more cards for this skill — complete it
-    completeSkill(queue);
+    completeSkill(queue, session);
     return getNextCard(session);
   }
 
@@ -160,7 +322,7 @@ export function processSwipe(session, skillIndex, cardIndex, response) {
 
   if (routineAnswered >= 3 && routineNos >= 2) {
     // Skip remaining complex/expert cards — they clearly don't do this skill
-    completeSkill(queue);
+    completeSkill(queue, session);
     return { skipped: true, next: getNextCard(session) };
   }
 
@@ -169,38 +331,31 @@ export function processSwipe(session, skillIndex, cardIndex, response) {
 
   // Check if all cards answered
   if (queue.currentCardIndex >= queue.cards.length) {
-    completeSkill(queue);
+    completeSkill(queue, session);
   }
 
   return { next: getNextCard(session) };
 }
 
 /**
- * Complete a skill assessment and compute scores
+ * Complete a skill assessment and compute scores using the multi-signal model.
  */
-function completeSkill(queue) {
+function completeSkill(queue, session) {
   queue.isComplete = true;
 
-  const totalConfirmed = queue.yesCount + (queue.sometimesCount * 0.5);
-  const totalCards = queue.cards.filter(c => c.response !== null).length;
+  const { score, components, weights } = computeGroundedConfidence(queue, session);
+  queue.confidence = round2(score);
+  queue.confidenceComponents = components;
+  queue.confidenceWeights = weights;
 
-  // Determine evidence tier
-  if (totalConfirmed >= 3 && queue.complexConfirmed >= 1) {
-    queue.needsMicroVerify = true; // Eligible for upgrade to "Demonstrated"
-    queue.evidenceTier = "RECOGNIZED";
-    queue.confidence = 0.6 + Math.min(totalConfirmed * 0.03, 0.15);
-  } else if (totalConfirmed >= 1) {
-    queue.evidenceTier = "SELF_REPORTED";
-    queue.confidence = 0.3 + Math.min(totalConfirmed * 0.05, 0.2);
-  } else {
-    queue.evidenceTier = "SELF_REPORTED";
-    queue.confidence = 0.2;
-  }
+  // Continuous-score → tier mapping
+  queue.evidenceTier =
+    score >= 0.80 ? "DEMONSTRATED" :
+    score >= 0.60 ? "RECOGNIZED"   :
+    "SELF_REPORTED";
 
-  // Boost for expert-level confirmations
-  if (queue.expertConfirmed >= 1) {
-    queue.confidence = Math.min(queue.confidence + 0.1, 0.85);
-  }
+  // Micro-verify window: borderline scores benefit most from a single verify task
+  queue.needsMicroVerify = (score >= 0.55 && score < 0.78);
 }
 
 /**
@@ -236,7 +391,8 @@ function checkMicroVerifyPhase(session) {
 }
 
 /**
- * Process micro-verification result
+ * Process micro-verification result.
+ * Re-computes the score so the explainer stays accurate (no `+0.15` additive).
  */
 export function processMicroVerify(session, skillIndex, passed) {
   const queue = session.skillQueues[skillIndex];
@@ -244,10 +400,16 @@ export function processMicroVerify(session, skillIndex, passed) {
 
   queue.microVerifyPassed = passed;
 
-  if (passed) {
-    queue.evidenceTier = "DEMONSTRATED";
-    queue.confidence = Math.min(queue.confidence + 0.15, 0.95);
-  }
+  // Re-run the multi-signal score; flipping micro_verify (0.5 → 1.0 or 0.0)
+  // shifts the result naturally, preserving determinism.
+  const { score, components, weights } = computeGroundedConfidence(queue, session);
+  queue.confidence = round2(score);
+  queue.confidenceComponents = components;
+  queue.confidenceWeights = weights;
+  queue.evidenceTier =
+    score >= 0.80 ? "DEMONSTRATED" :
+    score >= 0.60 ? "RECOGNIZED"   :
+    "SELF_REPORTED";
 
   // Check for more micro-verifications needed
   return { next: checkMicroVerifyPhase(session) };
@@ -287,6 +449,9 @@ function generateFinalResults(session) {
       evidenceLabel: tier.label,
       evidenceColor: tier.color,
       confidence: Math.round(q.confidence * 100) / 100,
+      confidenceComponents: q.confidenceComponents,
+      confidenceWeights: q.confidenceWeights,
+      usedGenericFallback: q.key === "generic_unknown",
       confirmedTasks,
       taskCounts: {
         yes: q.yesCount,

@@ -27,7 +27,7 @@ export async function POST(request) {
     }
 
     // Step 2: Create Mirror Test session (matches skills → task cards)
-    const session = createSession(classifiedSkills, countryCode);
+    const session = createSession(classifiedSkills, countryCode, skillsText || "");
     setSession(session.id, session);
 
     // Step 3: Get first card

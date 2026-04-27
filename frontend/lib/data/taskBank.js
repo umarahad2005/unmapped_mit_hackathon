@@ -198,92 +198,184 @@ const taskBank = {
       { id: "el_8", text: "Design electrical layouts for new buildings", complexity: "expert", category: "design" },
     ],
   },
+
+  // ─── MOTOR VEHICLE REPAIR (ISCO 7231) ─────────────────────────
+  "motor_vehicle_repair": {
+    label: "Motor Vehicle Repair & Diagnostics",
+    isco_codes: ["7231"],
+    domain: "technical",
+    tasks: [
+      { id: "mv_1", text: "Change engine oil, oil filters, and air filters during routine service", complexity: "routine", category: "service" },
+      { id: "mv_2", text: "Replace worn brake pads, brake shoes, and check brake fluid", complexity: "routine", category: "brakes" },
+      { id: "mv_3", text: "Diagnose engine problems by listening, checking compression, and reading fault codes", complexity: "complex", category: "diagnosis" },
+      { id: "mv_4", text: "Strip and rebuild a car or motorcycle engine — pistons, rings, gaskets, head", complexity: "complex", category: "engine_overhaul" },
+      { id: "mv_5", text: "Repair gearbox, clutch, and transmission problems", complexity: "expert", category: "drivetrain" },
+    ],
+  },
+
+  // ─── AGRICULTURAL MACHINERY (ISCO 7233, 8341) ────────────────
+  "agricultural_machinery": {
+    label: "Agricultural Machinery & Equipment",
+    isco_codes: ["7233", "8341"],
+    domain: "technical",
+    tasks: [
+      { id: "ag_1", text: "Service tractor engines — change oil, filters, coolant, and grease the chassis", complexity: "routine", category: "service" },
+      { id: "ag_2", text: "Operate a tractor for ploughing, harrowing, and trailer haulage", complexity: "routine", category: "operation" },
+      { id: "ag_3", text: "Diagnose diesel engine faults — fuel injection, glow plugs, smoke colour", complexity: "complex", category: "diagnosis" },
+      { id: "ag_4", text: "Repair hydraulic systems on tractors and harvesters — pumps, rams, hoses", complexity: "complex", category: "hydraulics" },
+      { id: "ag_5", text: "Overhaul a tractor transmission and align the PTO shaft", complexity: "expert", category: "drivetrain" },
+    ],
+  },
+
+  // ─── GARMENT OPERATOR (ISCO 8153) ────────────────────────────
+  "garment_operator": {
+    label: "Garment Sewing Machine Operation",
+    isco_codes: ["8153"],
+    domain: "technical",
+    tasks: [
+      { id: "go_1", text: "Operate an industrial sewing machine for long, straight production seams", complexity: "routine", category: "machine_op" },
+      { id: "go_2", text: "Hit daily piece-rate targets for a single garment operation (collar, sleeve, hem)", complexity: "routine", category: "production" },
+      { id: "go_3", text: "Adjust machine tension, needle, and thread for different fabric weights", complexity: "complex", category: "machine_setup" },
+      { id: "go_4", text: "Switch between operations on a line — overlocker, flatlock, buttonhole machine", complexity: "complex", category: "multi_machine" },
+      { id: "go_5", text: "Inspect finished garments for stitching defects and rework rejected pieces", complexity: "expert", category: "quality" },
+    ],
+  },
+
+  // ─── DIGITAL MARKETING (ISCO 2431, 2434) ─────────────────────
+  "digital_marketing": {
+    label: "Digital Marketing & Social Media",
+    isco_codes: ["2431", "2434"],
+    domain: "digital",
+    tasks: [
+      { id: "dm_1", text: "Post product photos and short captions to Instagram, Facebook, or TikTok", complexity: "routine", category: "posting" },
+      { id: "dm_2", text: "Design simple promotional graphics in Canva for a sale or new arrival", complexity: "routine", category: "design" },
+      { id: "dm_3", text: "Plan a weekly content calendar mixing posts, stories, and reels", complexity: "complex", category: "planning" },
+      { id: "dm_4", text: "Run a paid ad on Facebook or Instagram with a defined budget and audience", complexity: "complex", category: "paid_ads" },
+      { id: "dm_5", text: "Read engagement metrics and adjust posting strategy based on what performs", complexity: "expert", category: "analytics" },
+    ],
+  },
+
+  // ─── GENERIC UNKNOWN — honest catch-all ───────────────────────
+  // key === "generic_unknown" is the contract the UI uses to render the
+  // "we don't have specialised cards for this yet" warning. Don't rename.
+  "generic_unknown": {
+    label: "General Work (unspecialized)",
+    isco_codes: [],
+    domain: "catchall",
+    tasks: [
+      { id: "gu_1", text: "Show up on time and complete the routine tasks your job needs each day", complexity: "routine", category: "general" },
+      { id: "gu_2", text: "Talk with customers or co-workers about what needs to get done", complexity: "routine", category: "communication" },
+      { id: "gu_3", text: "Solve unexpected problems that come up while you are working", complexity: "complex", category: "problem_solving" },
+      { id: "gu_4", text: "Coordinate with other people to finish a task that takes more than one person", complexity: "complex", category: "coordination" },
+      { id: "gu_5", text: "Train or guide a new worker through the parts of the job you know best", complexity: "expert", category: "leadership" },
+    ],
+  },
 };
 
+// Primary keyword per task set — used as the weakest signal in the score.
+// One word per set; the matcher does substring containment, so "sew" hits
+// "sewing", "drive" hits "driver", etc.
+const TASK_SET_PRIMARY_KEYWORD = {
+  phone_repair: "phone",
+  programming: "code",
+  sales_trading: "sell",
+  tailoring: "sew",
+  farming: "farm",
+  driving: "driv",
+  hairdressing: "hair",
+  construction: "build",
+  teaching: "teach",
+  cooking: "cook",
+  electrical: "electric",
+  motor_vehicle_repair: "engine",
+  agricultural_machinery: "tractor",
+  garment_operator: "garment",
+  digital_marketing: "social media",
+  generic_unknown: "",
+};
+
+// Words mined from each label so a subdomain like "automotive" can match
+// the "Motor Vehicle Repair" set without a 4-digit ISCO hit.
+function labelKeywords(label) {
+  return label.toLowerCase().split(/[^a-z0-9]+/).filter(w => w.length >= 4);
+}
+
 /**
- * Find matching task sets for a list of classified skills
+ * Score one (skill, taskSet) candidate.
+ * 100 × overlap_count favours an exact 4-digit hit over a 3-digit major-group
+ * hit; subdomain equality is the second-strongest signal because it's the
+ * extractor's own taxonomy; label-keyword and primary-keyword fall behind.
+ */
+function scoreCandidate(skill, key, set) {
+  let score = 0;
+
+  const skillIsco = Array.isArray(skill.isco_codes) ? skill.isco_codes : [];
+  const setIsco = Array.isArray(set.isco_codes) ? set.isco_codes : [];
+  const overlap = skillIsco.filter(c => setIsco.includes(c)).length;
+  score += 100 * overlap;
+
+  const subdomain = (skill.subdomain || "").toLowerCase();
+  if (subdomain && subdomain === key) score += 40;
+
+  if (subdomain) {
+    const lk = labelKeywords(set.label);
+    if (lk.some(w => subdomain.includes(w) || w.includes(subdomain))) score += 20;
+  }
+
+  const primary = TASK_SET_PRIMARY_KEYWORD[key];
+  const skillText = ((skill.skill || "") + " " + (skill.name || "")).toLowerCase();
+  if (primary && skillText.includes(primary)) score += 10;
+
+  return score;
+}
+
+/**
+ * Find matching task sets for a list of classified skills.
+ * ISCO-first scoring: each input skill is scored against every task set,
+ * the highest-scoring set wins, and a min threshold of 30 routes weak
+ * matches to generic_unknown (the UI keys off that exact string).
  * @param {Array} classifiedSkills - Skills from agentRegistry
  * @returns {Array} Matched task sets with cards to show
  */
 export function matchTasksForSkills(classifiedSkills) {
   const matched = [];
+  const MIN_SCORE = 30;
 
   for (const skill of classifiedSkills) {
-    const skillLower = skill.skill.toLowerCase();
-    const subdomain = (skill.subdomain || "").toLowerCase();
-
-    // Try direct subdomain match first
-    let taskSet = taskBank[subdomain];
-
-    // Try skill name keyword matching
-    if (!taskSet) {
-      for (const [key, set] of Object.entries(taskBank)) {
-        const labelLower = set.label.toLowerCase();
-        if (
-          skillLower.includes(key.replace(/_/g, " ")) ||
-          labelLower.includes(skillLower) ||
-          key.includes(skillLower.replace(/\s+/g, "_")) ||
-          // Check ISCO code overlap
-          (skill.isco_codes && skill.isco_codes.some(c => set.isco_codes.includes(c)))
-        ) {
-          taskSet = set;
-          break;
-        }
-      }
+    let best = { key: null, score: -1, set: null };
+    for (const [key, set] of Object.entries(taskBank)) {
+      if (key === "generic_unknown") continue; // never compete on score; only fallthrough
+      const score = scoreCandidate(skill, key, set);
+      if (score > best.score) best = { key, score, set };
     }
 
-    // Broader keyword matching
-    if (!taskSet) {
-      const keywordMap = {
-        phone_repair: ["phone", "mobile", "repair", "screen", "fix", "tablet", "electronic"],
-        programming: ["python", "javascript", "html", "css", "code", "coding", "programming", "web", "software", "developer"],
-        sales_trading: ["sell", "sales", "trade", "market", "shop", "vendor", "store", "commerce", "negotiat"],
-        tailoring: ["sew", "tailor", "dress", "fabric", "garment", "cloth", "fashion"],
-        farming: ["farm", "crop", "plant", "harvest", "agriculture", "soil", "livestock"],
-        driving: ["driv", "taxi", "transport", "vehicle", "car", "truck", "bus"],
-        hairdressing: ["hair", "barber", "salon", "beauty", "braid", "style"],
-        construction: ["build", "construct", "mason", "brick", "carpenter", "plumb", "roof"],
-        teaching: ["teach", "tutor", "train", "mentor", "instruct", "lesson", "educate"],
-        cooking: ["cook", "food", "kitchen", "bak", "chef", "cater", "restaurant"],
-        electrical: ["electric", "wiring", "solar", "panel", "circuit", "voltage"],
-      };
-
-      for (const [key, keywords] of Object.entries(keywordMap)) {
-        if (keywords.some(kw => skillLower.includes(kw) || subdomain.includes(kw))) {
-          taskSet = taskBank[key];
-          break;
-        }
-      }
+    let chosenKey;
+    let chosenSet;
+    if (best.score >= MIN_SCORE) {
+      chosenKey = best.key;
+      chosenSet = best.set;
+    } else {
+      chosenKey = "generic_unknown";
+      chosenSet = taskBank.generic_unknown;
     }
 
-    if (taskSet) {
-      // Don't duplicate task sets
-      if (!matched.some(m => m.key === Object.keys(taskBank).find(k => taskBank[k] === taskSet))) {
-        matched.push({
-          key: Object.keys(taskBank).find(k => taskBank[k] === taskSet),
-          skill: skill.skill,
-          claimedLevel: skill.claimedLevel,
-          ...taskSet,
-        });
-      }
-    }
+    // De-dupe: one card per task-set key, even if multiple skills routed there.
+    if (matched.some(m => m.key === chosenKey)) continue;
+
+    matched.push({
+      key: chosenKey,
+      skill: skill.skill || skill.name,
+      claimedLevel: skill.claimedLevel,
+      ...chosenSet,
+    });
   }
 
-  // If nothing matched, create a generic fallback
   if (matched.length === 0) {
     matched.push({
-      key: "generic",
-      skill: classifiedSkills[0]?.skill || "General Skills",
+      key: "generic_unknown",
+      skill: classifiedSkills[0]?.skill || classifiedSkills[0]?.name || "General Skills",
       claimedLevel: "intermediate",
-      label: classifiedSkills[0]?.skill || "General Skills",
-      isco_codes: [],
-      domain: "catchall",
-      tasks: [
-        { id: "gen_1", text: "Perform routine daily tasks in your work with minimal supervision", complexity: "routine", category: "general" },
-        { id: "gen_2", text: "Communicate with customers or clients about their needs", complexity: "routine", category: "communication" },
-        { id: "gen_3", text: "Solve unexpected problems that come up during your work", complexity: "complex", category: "problem_solving" },
-        { id: "gen_4", text: "Train or guide new workers in your line of work", complexity: "expert", category: "leadership" },
-      ],
+      ...taskBank.generic_unknown,
     });
   }
 
