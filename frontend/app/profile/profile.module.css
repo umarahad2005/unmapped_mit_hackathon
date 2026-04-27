@@ -11,9 +11,10 @@
   right: 0;
   z-index: 100;
   padding: var(--space-md) 0;
-  background: rgba(10, 14, 23, 0.85);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-subtle);
+  background: var(--nav-backdrop);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--nav-border);
 }
 
 .navInner {
@@ -57,7 +58,7 @@
 
 .progressFill {
   height: 100%;
-  background: var(--gradient-primary);
+  background: var(--accent-marigold);
   border-radius: var(--radius-full);
   transition: width var(--transition-slow);
 }
@@ -141,10 +142,11 @@
 
 .textareaHint {
   font-size: 0.82rem;
-  color: var(--text-muted);
+  color: var(--ink-medium);
   margin-top: var(--space-sm);
-  padding: var(--space-sm);
-  background: rgba(10, 132, 214, 0.06);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--accent-forest-soft);
+  border-left: 3px solid var(--accent-forest);
   border-radius: var(--radius-sm);
 }
 
@@ -174,8 +176,8 @@
 }
 
 .countryActive {
-  border-color: var(--primary-500);
-  background: rgba(10, 132, 214, 0.08);
+  border-color: var(--accent-marigold);
+  background: var(--accent-marigold-soft);
 }
 
 .countryFlag { font-size: 2rem; }
@@ -219,9 +221,9 @@
 }
 
 .educationActive {
-  border-color: var(--primary-500);
-  background: rgba(10, 132, 214, 0.08);
-  color: var(--text-primary);
+  border-color: var(--accent-marigold);
+  background: var(--accent-marigold-soft);
+  color: var(--ink-strong);
 }
 
 .educationRadio {
@@ -237,14 +239,14 @@
 }
 
 .educationActive .educationRadio {
-  border-color: var(--primary-500);
+  border-color: var(--accent-marigold);
 }
 
 .educationRadioFill {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--primary-500);
+  background: var(--accent-marigold);
 }
 
 /* Prompt cards */
@@ -281,8 +283,8 @@
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(255,255,255,0.3);
-  border-top-color: white;
+  border: 2px solid rgba(14, 27, 44, 0.20);
+  border-top-color: var(--ink-strong);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
   display: inline-block;

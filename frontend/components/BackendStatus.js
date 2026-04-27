@@ -11,10 +11,10 @@ export default function BackendStatus({ backendOnline, systemStatus, onRetry }) 
   const [expanded, setExpanded] = useState(false);
 
   const statusColor = backendOnline === null
-    ? '#f59e0b'  // checking → amber
+    ? '#B8770D'  // checking → warm amber (warning)
     : backendOnline
-      ? '#34d399' // online → green
-      : '#ef4444'; // offline → red
+      ? '#0E7A5F' // online → forest green
+      : '#C4451C'; // offline → terracotta
 
   const statusText = backendOnline === null
     ? 'Checking...'
@@ -127,19 +127,18 @@ const styles = {
     top: '100%',
     right: 0,
     marginTop: '8px',
-    background: 'rgba(15, 20, 35, 0.95)',
-    backdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255,255,255,0.1)',
+    background: 'var(--surface-raised)',
+    border: '1px solid var(--border-subtle)',
     borderRadius: '12px',
     padding: '16px',
     minWidth: '280px',
-    boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+    boxShadow: 'var(--shadow-3)',
   },
   dropdownHeader: {
     fontSize: '0.85rem',
     marginBottom: '12px',
     paddingBottom: '8px',
-    borderBottom: '1px solid rgba(255,255,255,0.08)',
+    borderBottom: '1px solid var(--border-subtle)',
   },
   dropdownBody: {
     fontSize: '0.8rem',
@@ -150,15 +149,16 @@ const styles = {
     padding: '4px 0',
   },
   key: {
-    color: 'rgba(255,255,255,0.5)',
+    color: 'var(--ink-soft)',
   },
   val: {
-    color: 'rgba(255,255,255,0.9)',
+    color: 'var(--ink-strong)',
     fontFamily: '"JetBrains Mono", monospace',
     fontSize: '0.75rem',
+    fontVariantNumeric: 'tabular-nums',
   },
   offlineMsg: {
-    color: 'rgba(255,255,255,0.6)',
+    color: 'var(--ink-medium)',
     fontSize: '0.78rem',
     lineHeight: 1.5,
     margin: 0,
@@ -167,21 +167,23 @@ const styles = {
     display: 'block',
     marginTop: '8px',
     padding: '6px 10px',
-    background: 'rgba(255,255,255,0.06)',
+    background: 'var(--surface-sunken)',
     borderRadius: '6px',
     fontSize: '0.72rem',
-    color: '#a78bfa',
+    color: 'var(--accent-plum)',
   },
   retryBtn: {
     marginTop: '12px',
     width: '100%',
     padding: '8px',
-    background: 'rgba(59, 130, 246, 0.15)',
-    color: '#60a5fa',
-    border: '1px solid rgba(59, 130, 246, 0.3)',
+    background: 'var(--accent-marigold)',
+    color: 'var(--ink-strong)',
+    border: 'none',
     borderRadius: '8px',
     cursor: 'pointer',
     fontSize: '0.8rem',
+    fontWeight: 600,
     fontFamily: 'inherit',
+    minHeight: '36px',
   },
 };

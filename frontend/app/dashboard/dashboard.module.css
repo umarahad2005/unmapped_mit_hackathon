@@ -3,8 +3,11 @@
 
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: var(--space-md) 0; background: rgba(10, 14, 23, 0.85);
-  backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-subtle);
+  padding: var(--space-md) 0;
+  background: var(--nav-backdrop);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--nav-border);
 }
 
 .navInner {
@@ -27,7 +30,7 @@
   border-radius: var(--radius-sm); color: var(--text-muted); transition: all var(--transition-fast);
 }
 .countryBtn:hover { color: var(--text-secondary); }
-.countryBtnActive { background: var(--primary-500); color: white; }
+.countryBtnActive { background: var(--accent-marigold); color: var(--ink-strong); }
 
 .content {
   max-width: var(--container-max); margin: 0 auto;
@@ -46,9 +49,10 @@
 
 .statCard { padding: var(--space-lg); text-align: center; }
 .statValue {
-  font-family: var(--font-display); font-size: 1.8rem; font-weight: 800;
-  background: var(--gradient-primary); -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent; background-clip: text;
+  font-family: var(--font-display); font-size: 1.95rem; font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--accent-marigold);
+  font-variant-numeric: tabular-nums;
 }
 .statLabel { font-size: 0.78rem; color: var(--text-muted); margin-top: var(--space-xs); }
 .statChange { font-size: 0.82rem; font-weight: 700; margin-top: 2px; }

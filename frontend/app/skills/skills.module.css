@@ -4,9 +4,10 @@
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: var(--space-md) 0;
-  background: rgba(10, 14, 23, 0.85);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-subtle);
+  background: var(--nav-backdrop);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--nav-border);
 }
 
 .navInner {
@@ -50,9 +51,10 @@
 
 .profileAvatar {
   width: 64px; height: 64px; border-radius: 50%;
-  background: var(--gradient-primary); display: flex;
+  background: var(--accent-marigold); display: flex;
   align-items: center; justify-content: center;
-  font-weight: 800; font-size: 1.5rem; color: white; flex-shrink: 0;
+  font-weight: 700; font-size: 1.5rem; color: var(--ink-strong); flex-shrink: 0;
+  box-shadow: var(--shadow-1);
 }
 
 .profileInfo h1 { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; }
@@ -73,8 +75,8 @@
   display: flex; align-items: center; gap: var(--space-sm);
 }
 
-.tab:hover { color: var(--text-secondary); }
-.tabActive { color: var(--text-primary); border-bottom-color: var(--primary-500); }
+.tab:hover { color: var(--ink-strong); }
+.tabActive { color: var(--ink-strong); border-bottom-color: var(--accent-marigold); }
 .tabCount { font-size: 0.75rem; background: var(--bg-input); padding: 2px 8px; border-radius: var(--radius-full); }
 
 .tabContent { animation: fadeIn 0.3s ease-out; }
@@ -172,7 +174,7 @@
 .oppHeader h3 { font-size: 1.2rem; font-weight: 700; }
 .oppBadges { display: flex; gap: var(--space-sm); margin-top: var(--space-xs); }
 .oppScore { text-align: center; flex-shrink: 0; }
-.oppScoreValue { font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: var(--primary-400); display: block; }
+.oppScoreValue { font-family: var(--font-display); font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; color: var(--accent-marigold); display: block; font-variant-numeric: tabular-nums; }
 .oppScoreLabel { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; }
 
 .oppSignals { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md); margin-bottom: var(--space-md); padding: var(--space-md); background: var(--bg-glass); border-radius: var(--radius-md); }
@@ -180,7 +182,7 @@
 .oppSignalLabel { display: block; font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px; }
 .oppSignalValue { font-weight: 700; font-size: 0.95rem; font-family: var(--font-mono); }
 
-.oppPathway { display: flex; align-items: center; gap: var(--space-sm); font-size: 0.88rem; color: var(--text-secondary); margin-bottom: var(--space-md); padding: var(--space-sm); background: rgba(16, 185, 129, 0.06); border-radius: var(--radius-sm); }
+.oppPathway { display: flex; align-items: center; gap: var(--space-sm); font-size: 0.88rem; color: var(--ink-medium); margin-bottom: var(--space-md); padding: var(--space-sm) var(--space-md); background: var(--accent-forest-soft); border-left: 3px solid var(--accent-forest); border-radius: var(--radius-sm); }
 .oppPathwayIcon { flex-shrink: 0; }
 
 .oppTypes { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
@@ -209,7 +211,7 @@
 .dataDisclosure ul { list-style: none; display: flex; flex-direction: column; gap: var(--space-sm); }
 .dataDisclosure li { font-size: 0.88rem; color: var(--text-secondary); padding-left: var(--space-md); position: relative; }
 .dataDisclosure li::before { content: '→'; position: absolute; left: 0; color: var(--primary-400); }
-.honesty { padding: var(--space-md); background: rgba(245, 158, 11, 0.08); border-radius: var(--radius-md); border: 1px solid rgba(245, 158, 11, 0.15); margin-top: var(--space-md); }
+.honesty { padding: var(--space-md); background: var(--accent-marigold-soft); border-radius: var(--radius-md); border: 1px solid rgba(224, 138, 26, 0.30); border-left: 3px solid var(--accent-marigold); margin-top: var(--space-md); color: #784805; }
 
 @media (max-width: 1024px) {
   .sectionRow { grid-template-columns: 1fr; }
