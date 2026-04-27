@@ -162,7 +162,7 @@ function suggestPathway(sector, educationLevel, matchScore) {
 }
 
 function getExchangeRate(countryCode) {
-  const rates = { GHA: 15.8, IND: 83.5, KEN: 153, BGD: 110, NGA: 1580 };
+  const rates = { GHA: 15.8, BGD: 110, PAK: 280, IND: 83.5, KEN: 153, NGA: 1580 };
   return rates[countryCode] || 1;
 }
 

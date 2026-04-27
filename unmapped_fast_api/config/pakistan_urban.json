@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "config_id": "pakistan_urban_v1",
+    "country_code": "PK",
+    "context_label": "Urban Mixed Informal Economy — Pakistan",
+    "last_updated": "2026-04-28"
+  },
+
+  "language": {
+    "primary": "ur",
+    "secondary": "en",
+    "script_direction": "ltr",
+    "ui_strings_path": "locales/ur_PK.json"
+  },
+
+  "taxonomy": {
+    "primary": "ISCO-08",
+    "fallback": "ESCO",
+    "version": "2008",
+    "mapping_table_path": "data/isco/pk_credential_mapping.json"
+  },
+
+  "labor_data": {
+    "wage_source": "WDI",
+    "wage_endpoint": "NY.GDP.PCAP.CD",
+    "sector_growth_source": "SL.UEM.1524.ZS",
+    "employment_structure_source": "ILOSTAT",
+    "data_vintage_year": 2024,
+    "staleness_threshold_years": 3,
+    "living_wage_threshold": 32000,
+    "currency": "PKR",
+    "regional_label": "South Asia"
+  },
+
+  "automation": {
+    "base_scores": "frey_osborne",
+    "task_indices": "ILO_FOW",
+    "infrastructure_tier": "low",
+    "itu_penetration_rate": 0.32,
+    "calibration_multiplier": 0.65
+  },
+
+  "education": {
+    "credential_taxonomy": "ISCED_2011",
+    "hci_score": 0.41,
+    "step_dataset_available": false,
+    "level_mapping": {
+      "primary_complete": 1,
+      "secondary_complete": 2,
+      "technical_vocational": 3,
+      "tertiary": 4
+    }
+  },
+
+  "opportunities": {
+    "types_enabled": [
+      "self_employment",
+      "informal_wage",
+      "formal_wage",
+      "gig",
+      "training_pathway"
+    ],
+    "formal_employment_accessibility": 0.27
+  },
+
+  "structural_barriers": {
+    "wbl_score": 55.6,
+    "gender_mobility_restriction": true,
+    "gender_workplace_restriction": false,
+    "disability_data_available": false
+  },
+
+  "wittgenstein": {
+    "country_iso3": "PAK",
+    "projection_scenario": "SSP2",
+    "target_years": [2025, 2030, 2035]
+  },
+
+  "ui_strings": {
+    "intake_prompt": "آپ کیا کرتے ہیں مجھے بتائیں۔",
+    "intake_subtext": "اپنے کام، آپ نے جو بنایا ہے، جن مسائل کو حل کیا ہے، اپنے الفاظ میں بتائیں۔",
+    "intake_placeholder": "ٹائپ کریں یا مائکروفون پر ٹیپ کریں...",
+    "continue_button": "جاری رکھیں →",
+    "mirror_question": "کیا یہ آپ کا کام بیان کرتا ہے؟",
+    "mirror_yes": "ہاں",
+    "mirror_sometimes": "کبھی کبھار",
+    "mirror_no": "نہیں",
+    "verification_intro": "آئیے آپ کی چند مضبوط مہارتوں کی تصدیق کریں۔",
+    "feedback_question": "ہم نے جس موقع سے آپ کو ملایا، کیا وہ کام آیا؟",
+    "feedback_yes": "ہاں، کام ہوا",
+    "feedback_partial": "جزوی طور پر",
+    "feedback_no": "نہیں",
+    "tier_unverified": "غیر تصدیق شدہ",
+    "tier_recognized": "تسلیم شدہ",
+    "tier_demonstrated": "مظاہرہ شدہ",
+    "confidence_legend_unverified": "خود رپورٹ شدہ — ابھی تصدیق نہیں ہوئی",
+    "confidence_legend_recognized": "حقیقی کام کی پہچان کے ذریعے تصدیق شدہ",
+    "confidence_legend_demonstrated": "منظر نامے یا ثبوت کے ذریعے تصدیق شدہ",
+    "stale_data_warning": "یہ ڈیٹا ۳ سال سے زیادہ پرانا ہے اور موجودہ حالات کی مکمل عکاسی نہیں کر سکتا۔",
+    "inaccessible_opportunity": "ساختیاتی رکاوٹیں اس موقع تک رسائی کو متاثر کر سکتی ہیں۔"
+  },
+
+  "feedback": {
+    "contact_method": "sms",
+    "checkin_days": [30, 90]
+  }
+}

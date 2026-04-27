@@ -96,7 +96,7 @@ export async function classifySkills(skillsText, countryCode) {
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
-      contents: `Analyze the following self-description from a worker in ${countryCode === "IND" ? "India" : "Ghana"}.
+      contents: `Analyze the following self-description from a worker in ${({ GHA: "Ghana", BGD: "Bangladesh", PAK: "Pakistan" })[countryCode] || "Ghana"}.
 Extract each distinct skill claim and classify it.
 
 User said: "${skillsText}"

@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "locale": "ur_PK",
+    "name": "Urdu — Pakistan",
+    "direction": "ltr",
+    "notes": "Mirrors keys in en_GH.json. Strings duplicated from config/pakistan_urban.json ui_strings to support both inline and path-based string loading."
+  },
+
+  "intake_prompt": "آپ کیا کرتے ہیں مجھے بتائیں۔",
+  "intake_subtext": "اپنے کام، آپ نے جو بنایا ہے، جن مسائل کو حل کیا ہے، اپنے الفاظ میں بتائیں۔",
+  "intake_placeholder": "ٹائپ کریں یا مائکروفون پر ٹیپ کریں...",
+  "continue_button": "جاری رکھیں →",
+
+  "mirror_question": "کیا یہ آپ کا کام بیان کرتا ہے؟",
+  "mirror_yes": "ہاں",
+  "mirror_sometimes": "کبھی کبھار",
+  "mirror_no": "نہیں",
+
+  "verification_intro": "آئیے آپ کی چند مضبوط مہارتوں کی تصدیق کریں۔",
+
+  "feedback_question": "ہم نے جس موقع سے آپ کو ملایا، کیا وہ کام آیا؟",
+  "feedback_yes": "ہاں، کام ہوا",
+  "feedback_partial": "جزوی طور پر",
+  "feedback_no": "نہیں",
+
+  "tier_unverified": "غیر تصدیق شدہ",
+  "tier_recognized": "تسلیم شدہ",
+  "tier_demonstrated": "مظاہرہ شدہ",
+
+  "confidence_legend_unverified": "خود رپورٹ شدہ — ابھی تصدیق نہیں ہوئی",
+  "confidence_legend_recognized": "حقیقی کام کی پہچان کے ذریعے تصدیق شدہ",
+  "confidence_legend_demonstrated": "منظر نامے یا ثبوت کے ذریعے تصدیق شدہ",
+
+  "stale_data_warning": "یہ ڈیٹا ۳ سال سے زیادہ پرانا ہے اور موجودہ حالات کی مکمل عکاسی نہیں کر سکتا۔",
+  "inaccessible_opportunity": "ساختیاتی رکاوٹیں اس موقع تک رسائی کو متاثر کر سکتی ہیں۔"
+}

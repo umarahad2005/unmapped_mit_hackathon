@@ -22,27 +22,39 @@ export default function ProfilePage() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const countries = [
-    { code: "GHA", name: "Ghana", flag: "🇬🇭", context: "Urban Informal Economy" },
-    { code: "IND", name: "India", flag: "🇮🇳", context: "Rural Agricultural Economy" },
+    { code: "GHA", name: "Ghana",      flag: "🇬🇭", context: "Urban Informal Economy" },
+    { code: "BGD", name: "Bangladesh", flag: "🇧🇩", context: "Rural Agricultural Economy" },
+    { code: "PAK", name: "Pakistan",   flag: "🇵🇰", context: "Urban Mixed Informal Economy" },
   ];
 
   const educationLevels = {
     GHA: [
-      { id: "none", label: "No Formal Education" },
-      { id: "primary", label: "Primary School (P1-P6)" },
-      { id: "jss", label: "Junior Secondary (JHS)" },
-      { id: "sss", label: "Senior Secondary (SHS)" },
+      { id: "none",       label: "No Formal Education" },
+      { id: "primary",    label: "Primary School (P1-P6)" },
+      { id: "jss",        label: "Junior Secondary (JHS)" },
+      { id: "sss",        label: "Senior Secondary (SHS)" },
       { id: "vocational", label: "Vocational / Technical Training" },
-      { id: "tertiary", label: "Tertiary (University/Polytechnic)" },
+      { id: "tertiary",   label: "Tertiary (University/Polytechnic)" },
     ],
-    IND: [
-      { id: "none", label: "No Formal Education" },
-      { id: "primary", label: "Primary (Class I-V)" },
-      { id: "upper_primary", label: "Upper Primary (Class VI-VIII)" },
-      { id: "secondary", label: "Secondary (Class IX-X)" },
-      { id: "higher_secondary", label: "Higher Secondary (Class XI-XII)" },
-      { id: "iti", label: "ITI / Vocational Training" },
-      { id: "graduate", label: "Graduate Degree" },
+    BGD: [
+      { id: "none",       label: "No Formal Education" },
+      { id: "primary",    label: "Primary (Class I-V)" },
+      { id: "secondary",  label: "Secondary (Class VI-X)" },
+      { id: "ssc",        label: "SSC Certificate" },
+      { id: "hsc",        label: "HSC Certificate" },
+      { id: "vocational", label: "Vocational / SSC (Vocational)" },
+      { id: "diploma",    label: "Diploma in Engineering" },
+      { id: "tertiary",   label: "Bachelor's Degree" },
+    ],
+    PAK: [
+      { id: "none",         label: "No Formal Education" },
+      { id: "primary",      label: "Primary (Class 1-5)" },
+      { id: "middle",       label: "Middle (Class 6-8)" },
+      { id: "matric",       label: "Matric / SSC (Class 9-10)" },
+      { id: "intermediate", label: "Intermediate / FA / FSc (Class 11-12)" },
+      { id: "vocational",   label: "Vocational / TEVTA Certificate" },
+      { id: "diploma",      label: "Diploma of Associate Engineer (DAE)" },
+      { id: "tertiary",     label: "Bachelor's Degree" },
     ],
   };
 
@@ -54,12 +66,19 @@ export default function ProfilePage() {
       education: "sss",
       skillsText: "I repair mobile phones and tablets. I've been doing this since I was 17 — people in my neighborhood bring me broken screens, battery issues, software problems. I speak English, Twi, and some Hausa. I taught myself Python and HTML from YouTube. I also help my aunt sell clothes at Makola Market on weekends. I can negotiate with suppliers and manage inventory.",
     },
-    IND: {
-      name: "Ravi",
-      age: "20",
-      location: "Rural Madhya Pradesh",
-      education: "secondary",
-      skillsText: "I help my family on the farm — planting wheat and soybean, operating the tractor, managing irrigation. I know how to repair tractor engines from watching my uncle. I use my smartphone for everything — WhatsApp, YouTube, Google Pay. I'm interested in learning about solar panels because many people in my village want them. I can also drive a motorcycle.",
+    BGD: {
+      name: "Nusrat",
+      age: "21",
+      location: "Rural Rangpur",
+      education: "ssc",
+      skillsText: "I help my family farm rice and vegetables. I know when to plant and harvest, how to manage water in the dry months. I sew garments — shirts, kameez — at home, the cooperative pays per piece. I use a mobile phone for prayers, weather, and to message my cousin in Dhaka. I want to learn tailoring patterns so I can train other women in our village.",
+    },
+    PAK: {
+      name: "Ayesha",
+      age: "23",
+      location: "Karachi (Korangi)",
+      education: "intermediate",
+      skillsText: "I help my family run a stitching business from home — we take orders from a boutique in Tariq Road, three or four sets a week. I cut, stitch, and finish kameez and shalwar. I learned Canva and Excel from YouTube, so I make our orders sheet and the boutique's Instagram posts. I speak Urdu, Sindhi, and English. I want to start taking orders directly so we don't lose half the money to the middleman.",
     },
   };
 

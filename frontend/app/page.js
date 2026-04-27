@@ -39,8 +39,10 @@ export default function Home() {
     if (backendOnline) {
       setSwapStatus("swapping");
       try {
-        const configMap = { GHA: "ghana_urban", IND: "india_rural" };
-        await swapConfig(configMap[countryCode] || "ghana_urban");
+        const target =
+          { GHA: "ghana_urban", BGD: "bangladesh_rural", PAK: "pakistan_urban" }[countryCode] ||
+          "ghana_urban";
+        await swapConfig(target);
         setSwapStatus("success");
         setTimeout(() => setSwapStatus(null), 2000);
       } catch (e) {
@@ -54,9 +56,64 @@ export default function Home() {
   const stats = [
     { value: "600M+", label: "Youth with unmapped skills globally" },
     { value: "88.5%", label: "Informal employment in Ghana" },
-    { value: "23.2%", label: "Youth unemployment in India" },
+    { value: "19%", label: "Digital penetration, rural Bangladesh" },
     { value: "0", label: "Systems connecting them to opportunity" },
   ];
+
+  // Country details table — drives both the tab buttons and the panel content.
+  // To add another country: drop a backend JSON, add a frontend lib/config/<x>.js,
+  // and add an entry here. No JSX changes needed.
+  const COUNTRIES = {
+    GHA: {
+      flag: "🇬🇭",
+      name: "Ghana",
+      backendConfig: "ghana_urban",
+      title: "🇬🇭 Ghana — Urban Informal Economy",
+      rows: [
+        ["Region", "Sub-Saharan Africa"],
+        ["Currency", "GHS (₵)"],
+        ["Informal Employment", "88.5%"],
+        ["Youth NEET Rate", "13.1%"],
+        ["Digital Penetration", "53%"],
+        ["Automation Adj. Factor", "0.65×"],
+        ["Education Levels", "P1-P6, JHS, SHS, Tertiary"],
+        ["Key Sectors", "Agriculture, Trade, ICT"],
+      ],
+    },
+    BGD: {
+      flag: "🇧🇩",
+      name: "Bangladesh",
+      backendConfig: "bangladesh_rural",
+      title: "🇧🇩 Bangladesh — Rural Agricultural Economy",
+      rows: [
+        ["Region", "South Asia"],
+        ["Currency", "BDT (৳)"],
+        ["Primary Language", "Bengali (bn)"],
+        ["Infrastructure Tier", "Minimal"],
+        ["Digital Penetration", "19%"],
+        ["Automation Adj. Factor", "0.55×"],
+        ["Taxonomy", "ISCO-08 (fallback ESCO)"],
+        ["Opportunity Types", "Agri-coop, Self-emp, Informal, Training"],
+      ],
+    },
+    PAK: {
+      flag: "🇵🇰",
+      name: "Pakistan",
+      backendConfig: "pakistan_urban",
+      title: "🇵🇰 Pakistan — Urban Mixed Informal Economy",
+      rows: [
+        ["Region", "South Asia"],
+        ["Currency", "PKR (₨)"],
+        ["Primary Language", "Urdu (ur)"],
+        ["Infrastructure Tier", "Low"],
+        ["Digital Penetration", "32%"],
+        ["Automation Adj. Factor", "0.65×"],
+        ["WBL Score (gender)", "55.6 / 100"],
+        ["Opportunity Types", "Self-emp, Informal, Formal, Gig, Training"],
+      ],
+    },
+  };
+  const activeData = COUNTRIES[activeCountry] || COUNTRIES.GHA;
 
   const modules = [
     {
@@ -248,31 +305,26 @@ export default function Home() {
       <section className={styles.configSection}>
         <div className="container">
           <p className="section-label">Country-Agnostic</p>
-          <h2 className="section-title">One codebase. Any country.</h2>
+          <h2 className="section-title">One codebase. Three countries — and counting.</h2>
           <p className="section-subtitle" style={{ marginBottom: "var(--space-2xl)" }}>
-            Switch between country configurations without changing a single line of code. Labor
-            market data, education taxonomy, language — all configurable.
+            Ghana, Bangladesh, and Pakistan each have a JSON config file. Switching context — labor
+            data, taxonomy, language, automation calibration — happens at runtime, with zero code
+            changes.
           </p>
           <div className={styles.configDemo}>
             <div className={styles.configTabs}>
-              <button
-                className={`${styles.configTab} ${activeCountry === "GHA" ? styles.configTabActive : ""}`}
-                onClick={() => handleCountrySwap("GHA")}
-              >
-                🇬🇭 Ghana
-                {swapStatus === "swapping" && activeCountry === "GHA" && (
-                  <Loader size={14} style={{ marginLeft: 6 }} />
-                )}
-              </button>
-              <button
-                className={`${styles.configTab} ${activeCountry === "IND" ? styles.configTabActive : ""}`}
-                onClick={() => handleCountrySwap("IND")}
-              >
-                🇮🇳 India
-                {swapStatus === "swapping" && activeCountry === "IND" && (
-                  <Loader size={14} style={{ marginLeft: 6 }} />
-                )}
-              </button>
+              {Object.entries(COUNTRIES).map(([code, country]) => (
+                <button
+                  key={code}
+                  className={`${styles.configTab} ${activeCountry === code ? styles.configTabActive : ""}`}
+                  onClick={() => handleCountrySwap(code)}
+                >
+                  {country.flag} {country.name}
+                  {swapStatus === "swapping" && activeCountry === code && (
+                    <Loader size={14} style={{ marginLeft: 6 }} />
+                  )}
+                </button>
+              ))}
               {swapStatus === "success" && (
                 <span
                   style={{
@@ -289,83 +341,17 @@ export default function Home() {
               )}
             </div>
             <div className={`${styles.configPanel} glass-card`}>
-              {activeCountry === "GHA" ? (
-                <div className={styles.configContent}>
-                  <h3>🇬🇭 Ghana — Urban Informal Economy</h3>
-                  <div className={styles.configGrid}>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Region</span>
-                      <span className={styles.configVal}>Sub-Saharan Africa</span>
+              <div className={styles.configContent}>
+                <h3>{activeData.title}</h3>
+                <div className={styles.configGrid}>
+                  {activeData.rows.map(([key, val]) => (
+                    <div key={key} className={styles.configItem}>
+                      <span className={styles.configKey}>{key}</span>
+                      <span className={styles.configVal}>{val}</span>
                     </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Currency</span>
-                      <span className={styles.configVal}>GHS (₵)</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Informal Employment</span>
-                      <span className={styles.configVal}>88.5%</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Youth NEET Rate</span>
-                      <span className={styles.configVal}>13.1%</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Digital Penetration</span>
-                      <span className={styles.configVal}>53%</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Automation Adj. Factor</span>
-                      <span className={styles.configVal}>0.65×</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Education Levels</span>
-                      <span className={styles.configVal}>P1-P6, JHS, SHS, Tertiary</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Key Sectors</span>
-                      <span className={styles.configVal}>Agriculture, Trade, ICT</span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ) : (
-                <div className={styles.configContent}>
-                  <h3>🇮🇳 India — Rural Agricultural Economy</h3>
-                  <div className={styles.configGrid}>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Region</span>
-                      <span className={styles.configVal}>South Asia</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Currency</span>
-                      <span className={styles.configVal}>INR (₹)</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Informal Employment</span>
-                      <span className={styles.configVal}>89.1%</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Youth NEET Rate</span>
-                      <span className={styles.configVal}>28.5%</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Digital Penetration</span>
-                      <span className={styles.configVal}>47%</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Automation Adj. Factor</span>
-                      <span className={styles.configVal}>0.72×</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Education Levels</span>
-                      <span className={styles.configVal}>Class I-XII, ITI, Graduate</span>
-                    </div>
-                    <div className={styles.configItem}>
-                      <span className={styles.configKey}>Key Sectors</span>
-                      <span className={styles.configVal}>Agriculture, Construction, ICT</span>
-                    </div>
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </div>

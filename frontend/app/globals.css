@@ -254,6 +254,14 @@
 }
 
 /* ============================================================
+   Hide the Next.js dev indicator (the floating "N" / build-status
+   pop-up that only appears in `next dev`). The element is rendered
+   inside a <nextjs-portal> web component, so a single rule is enough.
+   No effect in production builds — the portal is not emitted there.
+   ============================================================ */
+nextjs-portal { display: none !important; }
+
+/* ============================================================
    Reset + Base
    ============================================================ */
 

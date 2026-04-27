@@ -5,11 +5,13 @@ import { extractSkills, mapToOccupations, generateProfile } from './skillExtract
 import { analyzeRisk, generateRiskSummary, getEducationTrends } from './riskAnalyzer';
 import { matchOpportunities, generateDashboardData } from './opportunityMatcher';
 import ghanaConfig from '../config/ghana';
-import indiaConfig from '../config/india';
+import bangladeshConfig from '../config/bangladesh';
+import pakistanConfig from '../config/pakistan';
 
 const configs = {
   GHA: ghanaConfig,
-  IND: indiaConfig,
+  BGD: bangladeshConfig,
+  PAK: pakistanConfig,
 };
 
 // Main orchestration — runs the full pipeline

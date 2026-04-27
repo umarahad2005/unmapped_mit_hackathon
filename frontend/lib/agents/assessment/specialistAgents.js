@@ -13,7 +13,7 @@ const getAI = () => new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
  * @param {string} countryCode - Country context
  */
 export async function generateMicroVerification(skillName, domain, confirmedTasks, countryCode) {
-  const country = countryCode === "IND" ? "India" : "Ghana";
+  const country = ({ GHA: "Ghana", BGD: "Bangladesh", PAK: "Pakistan" })[countryCode] || "Ghana";
   const taskList = confirmedTasks.map(t => `- ${t.text}`).join("\n");
 
   // Try Gemini first

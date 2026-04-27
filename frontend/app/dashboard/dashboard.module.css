@@ -1,45 +1,158 @@
 /* Dashboard Page */
-.main { min-height: 100vh; background: var(--bg-base); }
+.main { min-height: 100vh; background: var(--surface-canvas); }
 
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: var(--space-md) 0;
+  padding: var(--space-3) 0;
   background: var(--nav-backdrop);
   backdrop-filter: saturate(140%) blur(10px);
   -webkit-backdrop-filter: saturate(140%) blur(10px);
   border-bottom: 1px solid var(--nav-border);
 }
 
+/* Two-section flex; no absolute positioning, no overlap. */
 .navInner {
-  max-width: var(--container-max); margin: 0 auto; padding: 0 var(--space-lg);
-  display: flex; align-items: center; justify-content: space-between;
+  max-width: var(--container-default);
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
 }
 
-.logo { display: flex; align-items: center; gap: var(--space-sm); text-decoration: none; }
-.logoText { font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; letter-spacing: 0.05em; color: var(--text-primary); }
+.navStart {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0; /* allow children to truncate cleanly */
+}
 
-.navCenter { position: absolute; left: 50%; transform: translateX(-50%); }
-.dashLabel { font-family: var(--font-mono); font-size: 0.82rem; color: var(--primary-400); font-weight: 600; }
+.navEnd {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-shrink: 0;
+}
 
-.navLinks { display: flex; align-items: center; gap: var(--space-md); }
-.navLink { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; }
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.logoIcon { color: var(--accent-marigold); display: inline-flex; }
+.logoText {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink-strong);
+}
 
-.countryToggle { display: flex; gap: var(--space-xs); background: var(--bg-glass); border-radius: var(--radius-md); padding: 3px; }
+/* Vertical divider between brand and section label */
+.divider {
+  width: 1px;
+  height: 22px;
+  background: var(--border-default);
+  flex-shrink: 0;
+}
+
+.dashLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--accent-forest);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  min-width: 0;
+}
+.dashLabel svg { flex-shrink: 0; }
+
+.navLink {
+  font-size: var(--text-sm);
+  color: var(--ink-medium);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--easing-base);
+}
+.navLink:hover { color: var(--ink-strong); }
+
+.navCta { flex-shrink: 0; }
+
+/* ─── Country toggle (lives in the content header, not the nav) ─── */
+.countryToggle {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+}
+
 .countryBtn {
-  padding: 6px 14px; font-size: 0.82rem; font-weight: 600;
-  border-radius: var(--radius-sm); color: var(--text-muted); transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  color: var(--ink-medium);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-fast) var(--easing-base),
+    color var(--duration-fast) var(--easing-base);
+  min-height: 36px;
 }
-.countryBtn:hover { color: var(--text-secondary); }
-.countryBtnActive { background: var(--accent-marigold); color: var(--ink-strong); }
+.countryBtn:hover { color: var(--ink-strong); background: var(--surface-overlay); }
+.countryBtnActive,
+.countryBtnActive:hover {
+  background: var(--accent-marigold);
+  color: var(--ink-strong);
+  box-shadow: var(--shadow-1);
+}
 
+/* ─── Content ─── */
 .content {
-  max-width: var(--container-max); margin: 0 auto;
-  padding: calc(var(--nav-height) + var(--space-xl)) var(--space-lg) var(--space-4xl);
+  max-width: var(--container-wide);
+  margin: 0 auto;
+  padding: calc(var(--nav-height) + var(--space-6)) var(--space-5) var(--space-9);
 }
 
-.header { margin-bottom: var(--space-xl); }
-.headerTitle { font-family: var(--font-display); font-size: 2rem; font-weight: 800; }
-.headerSub { font-size: 0.9rem; color: var(--text-muted); margin-top: var(--space-xs); }
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+.headerText { min-width: 0; flex: 1; }
+.headerTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: var(--leading-display);
+  color: var(--ink-strong);
+}
+.headerSub {
+  font-size: var(--text-sm);
+  color: var(--ink-medium);
+  margin-top: var(--space-2);
+  line-height: var(--leading-body);
+  max-width: 60ch;
+}
 
 /* Stats Grid */
 .statsGrid {
@@ -86,10 +199,24 @@
 @media (max-width: 1024px) {
   .statsGrid { grid-template-columns: repeat(2, 1fr); }
   .chartsRow { grid-template-columns: 1fr; }
-  .navCenter { display: none; }
+  /* Hide the dashboard label and the secondary nav link when the nav gets
+     tight, but keep the country toggle (in the header) and the primary
+     actions on the right. */
+  .dashLabel,
+  .divider { display: none; }
+  .navLink { display: none; }
+  .navCta { display: none; }
 }
 
 @media (max-width: 768px) {
   .statsGrid { grid-template-columns: 1fr 1fr; }
-  .countryToggle { display: none; }
+  .header { flex-direction: column; align-items: stretch; }
+  .countryToggle { width: 100%; justify-content: stretch; }
+  .countryBtn { flex: 1; justify-content: center; }
+}
+
+@media (max-width: 540px) {
+  .statsGrid { grid-template-columns: 1fr; }
+  .countryBtn { padding: 8px 10px; font-size: var(--text-xs); }
+  .headerTitle { font-size: var(--text-xl); }
 }

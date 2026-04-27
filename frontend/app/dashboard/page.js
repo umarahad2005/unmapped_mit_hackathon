@@ -7,6 +7,8 @@ import { educationProjections, returnsToEducation } from "../../lib/data/laborMa
 import { occupations, lmicCalibration } from "../../lib/data/occupations";
 import { useBackend } from "../../lib/api/useBackend";
 import BackendStatus from "../../components/BackendStatus";
+import ThemeToggle from "../../components/ThemeToggle";
+import { Compass, BarChart3, ArrowRight } from "../../components/Icons";
 import styles from "./dashboard.module.css";
 
 export default function DashboardPage() {
@@ -32,7 +34,7 @@ export default function DashboardPage() {
         .catch(() => setBackendSignals(null));
 
       // Also trigger config swap on the backend
-      const configMap = { GHA: 'ghana_urban', IND: 'india_rural' };
+      const configMap = { GHA: 'ghana_urban', BGD: 'bangladesh_rural', PAK: 'pakistan_urban' };
       swapConfig(configMap[country] || 'ghana_urban').catch(() => {});
     }
   }, [country, backendOnline]);
@@ -80,6 +82,8 @@ export default function DashboardPage() {
         if (existing) existing.destroy();
 
         const returns = dashData.education_returns;
+        if (!returns || !returns.labels) return; // skip silently if data missing
+
         new Chart(wageChartRef.current, {
           type: 'bar',
           data: {
@@ -173,50 +177,99 @@ export default function DashboardPage() {
     });
   }, [dashData, country]);
 
-  if (!dashData) return null;
+  // Defensive fallback: if a future country lacks data, show a friendly
+  // message instead of a blank screen. Today GHA/BGD/PAK all have data.
+  if (!dashData) {
+    return (
+      <main className={styles.main}>
+        <nav className={styles.nav}>
+          <div className={styles.navInner}>
+            <div className={styles.navStart}>
+              <Link href="/" className={styles.logo} aria-label="UNMAPPED home">
+                <span className={styles.logoIcon}><Compass size={22} /></span>
+                <span className={styles.logoText}>UNMAPPED</span>
+              </Link>
+            </div>
+            <div className={styles.navEnd}>
+              <ThemeToggle />
+            </div>
+          </div>
+        </nav>
+        <div className={styles.content} style={{ paddingTop: 'calc(var(--nav-height) + var(--space-9))' }}>
+          <div className="glass-card" style={{ padding: 'var(--space-7)', textAlign: 'center', maxWidth: 600, margin: '0 auto' }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)', marginBottom: 'var(--space-3)' }}>
+              No dashboard data for this country yet.
+            </h1>
+            <p style={{ color: 'var(--ink-medium)', marginBottom: 'var(--space-5)', lineHeight: 1.6 }}>
+              We don&apos;t have an aggregate dataset wired up for <strong>{country}</strong> yet.
+              Try Ghana, Bangladesh, or Pakistan from the country toggle.
+            </p>
+            <Link href="/" className="btn btn-primary">← Back to home</Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className={styles.main}>
       <nav className={styles.nav}>
         <div className={styles.navInner}>
-          <Link href="/" className={styles.logo}>
-            <span style={{color: 'var(--primary-400)'}}>◆</span>
-            <span className={styles.logoText}>UNMAPPED</span>
-          </Link>
-          <div className={styles.navCenter}>
-            <span className={styles.dashLabel}>📊 Policymaker Dashboard</span>
+          {/* Left: brand + section label */}
+          <div className={styles.navStart}>
+            <Link href="/" className={styles.logo} aria-label="UNMAPPED home">
+              <span className={styles.logoIcon}><Compass size={22} /></span>
+              <span className={styles.logoText}>UNMAPPED</span>
+            </Link>
+            <span className={styles.divider} aria-hidden="true" />
+            <span className={styles.dashLabel}>
+              <BarChart3 size={16} />
+              <span>Policymaker Dashboard</span>
+            </span>
           </div>
-          <div className={styles.navLinks}>
+
+          {/* Right: actions */}
+          <div className={styles.navEnd}>
+            <Link href="/profile" className={styles.navLink}>Map Skills</Link>
+            <Link href="/team" className={styles.navLink}>Team</Link>
             <BackendStatus
               backendOnline={backendOnline}
               systemStatus={systemStatus}
               onRetry={retryConnection}
             />
-            <Link href="/profile" className={styles.navLink}>Map Skills</Link>
-            <div className={styles.countryToggle}>
-              {countries.map(c => (
-                <button
-                  key={c.code}
-                  className={`${styles.countryBtn} ${country === c.code ? styles.countryBtnActive : ''}`}
-                  onClick={() => setCountry(c.code)}
-                >
-                  {c.flag} {c.name}
-                </button>
-              ))}
-            </div>
+            <ThemeToggle />
+            <Link href="/profile" className={`btn btn-primary btn-sm ${styles.navCta}`}>
+              Start Mapping <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </nav>
 
       <div className={styles.content}>
         <div className={styles.header}>
-          <div>
+          <div className={styles.headerText}>
             <h1 className={styles.headerTitle}>
               {dashData.country} — Labor Market Overview
             </h1>
             <p className={styles.headerSub}>
               Aggregate data for policymakers and program officers. Source: ILO ILOSTAT, World Bank WDI ({dashData.year})
             </p>
+          </div>
+
+          {/* Country toggle lives in the page header, not the nav — it's a
+              content filter, not navigation. Clean alignment + room for 3+ countries. */}
+          <div className={styles.countryToggle} role="tablist" aria-label="Country context">
+            {countries.map(c => (
+              <button
+                key={c.code}
+                role="tab"
+                aria-selected={country === c.code}
+                className={`${styles.countryBtn} ${country === c.code ? styles.countryBtnActive : ''}`}
+                onClick={() => setCountry(c.code)}
+              >
+                {c.flag} <span>{c.name}</span>
+              </button>
+            ))}
           </div>
         </div>
 

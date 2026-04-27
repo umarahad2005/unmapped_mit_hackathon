@@ -143,9 +143,10 @@ const majorGroups = {
 // Adjusts Frey-Osborne scores based on local infrastructure, digital penetration, labor cost
 const lmicCalibration = {
   "GHA": { factor: 0.65, digital_penetration: 0.53, labor_cost_index: 0.18, notes: "Lower automation adoption due to infrastructure gaps and low labor costs" },
-  "IND": { factor: 0.72, digital_penetration: 0.47, labor_cost_index: 0.22, notes: "Rapid digitization in urban areas, but rural economy largely manual" },
+  "BGD": { factor: 0.55, digital_penetration: 0.19, labor_cost_index: 0.12, notes: "Garment sector mechanizing but rural economy remains manual; minimal digital infrastructure" },
+  "PAK": { factor: 0.65, digital_penetration: 0.32, labor_cost_index: 0.20, notes: "Urban services digitizing; informal sector ~71% of non-ag employment limits automation reach" },
+  "IND": { factor: 0.72, digital_penetration: 0.47, labor_cost_index: 0.22, notes: "Reference comparison only — not an active demo config" },
   "KEN": { factor: 0.60, digital_penetration: 0.40, labor_cost_index: 0.15, notes: "Strong mobile money infrastructure, but limited industrial automation" },
-  "BGD": { factor: 0.58, digital_penetration: 0.35, labor_cost_index: 0.12, notes: "Garment sector mechanizing but most economy remains manual" },
   "NGA": { factor: 0.62, digital_penetration: 0.42, labor_cost_index: 0.20, notes: "Oil sector automated, but informal economy dominates employment" },
   "ETH": { factor: 0.50, digital_penetration: 0.25, labor_cost_index: 0.10, notes: "Predominantly agricultural, very low automation penetration" },
   "PHL": { factor: 0.75, digital_penetration: 0.60, labor_cost_index: 0.28, notes: "BPO sector at high risk, manufacturing modernizing" },

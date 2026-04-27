@@ -69,7 +69,10 @@ export async function POST(request) {
       return Response.json({ error: "Gemini API key not configured" }, { status: 500 });
     }
 
-    const userPrompt = `Country context: ${countryCode === 'IND' ? 'India' : 'Ghana'}
+    const COUNTRY_NAMES = { GHA: 'Ghana', BGD: 'Bangladesh', PAK: 'Pakistan' };
+    const countryName = COUNTRY_NAMES[countryCode] || 'Ghana';
+
+    const userPrompt = `Country context: ${countryName}
 Education level: ${education || 'not specified'}
 
 User's description of their skills and experience:
