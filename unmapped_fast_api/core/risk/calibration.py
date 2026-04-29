@@ -60,49 +60,141 @@ class CalibratedRiskScore:
 # ── Frey-Osborne Score Loader ─────────────────────────────────────────────────
 
 class FreyOsborneLoader:
+    """
+    Reads Frey & Osborne (2013) automation probabilities from
+    data/frey_osborne/scores.json. The file ships three lookup tables:
+
+      • scores[]               — SOC-keyed entries (canonical Frey-Osborne format)
+      • isco_scores            — ISCO-08 4-digit → probability (project's lingua franca)
+      • isco_major_group_means — final fallback by ISCO 1-digit major group
+
+    Resolution order for `get_score_for_skill(taxonomy_id)`:
+      1. ESCO direct lookup (a small curated table for the engine's own ESCO IDs)
+      2. ISCO 4-digit lookup (when taxonomy_id parses as `\\d{4}`)
+      3. ISCO major-group mean (when taxonomy_id parses as `\\d{4}` but the
+         exact 4-digit isn't in isco_scores — uses the first digit)
+      4. Default 0.50 (moderate)
+    """
+
     SCORES_PATH = Path("data/frey_osborne/scores.json")
-    _cache: dict[str, float] | None = None
+
+    _soc_cache:           dict[str, float] | None = None  # SOC code → probability
+    _isco_cache:          dict[str, float] | None = None  # ISCO 4-digit → probability
+    _major_group_cache:   dict[str, float] | None = None  # ISCO 1-digit → probability
+
+    # Curated ESCO → probability fallback for skills tagged with the engine's
+    # own ESCO IDs (a small set; not from the JSON because ESCO/SOC do not
+    # cross-walk one-to-one).
+    ESCO_TO_FREY: dict[str, float] = {
+        "S5.6.0": 0.67,   # Electronic equipment repair
+        "S5.6.1": 0.72,   # Component testing
+        "S5.6.2": 0.58,   # Circuit fault diagnosis
+        "S1.2.1": 0.30,   # Customer communication
+        "S1.2.3": 0.22,   # Conflict resolution
+        "S6.1.0": 0.45,   # Business operations
+        "S6.1.1": 0.81,   # Basic bookkeeping
+        "S2.1.0": 0.51,   # Agricultural oversight
+        "S2.1.1": 0.55,   # Produce grading
+        "S3.1.0": 0.62,   # Materials handling
+        "S3.2.1": 0.40,   # Electrical wiring
+        "S1.4.0": 0.25,   # Teaching
+        "S4.1.0": 0.35,   # Basic patient care
+    }
+
+    # ── Public lookups ────────────────────────────────────────────────────────
 
     @classmethod
     def get_score(cls, onet_soc: str) -> float | None:
-        if cls._cache is None:
-            cls._load()
-        return cls._cache.get(onet_soc) if cls._cache else None
+        """Direct SOC lookup. None if not in the dataset."""
+        cls._ensure_loaded()
+        return cls._soc_cache.get(onet_soc) if cls._soc_cache else None
+
+    @classmethod
+    def get_score_by_isco(cls, isco_code: str) -> float | None:
+        """
+        ISCO-first lookup with major-group fallback.
+        Accepts 4-digit codes like "7421"; 3-digit codes fall back to major group.
+        Returns None if neither resolves.
+        """
+        cls._ensure_loaded()
+        if not isco_code or not cls._isco_cache:
+            return None
+        code = str(isco_code).strip()
+        # 4-digit exact
+        if code in cls._isco_cache:
+            return cls._isco_cache[code]
+        # Major-group fallback (first digit)
+        if cls._major_group_cache and code[:1] in cls._major_group_cache:
+            return cls._major_group_cache[code[:1]]
+        return None
 
     @classmethod
     def get_score_for_skill(cls, taxonomy_id: str) -> float:
         """
-        Get automation probability for a skill taxonomy ID.
-        Maps ESCO → O*NET SOC using a simple lookup.
-        Falls back to 0.5 (moderate) if not found.
+        Resolve any taxonomy_id (ESCO, ISCO 4-digit, ISCO major group) to a
+        Frey-Osborne probability. Falls back to 0.50 (moderate) when nothing
+        in the resolution chain matches.
         """
-        # Simplified mapping for hackathon: ESCO IDs → Frey-Osborne scores
-        ESCO_TO_FREY: dict[str, float] = {
-            "S5.6.0": 0.67,   # Electronic equipment repair
-            "S5.6.1": 0.72,   # Component testing
-            "S5.6.2": 0.58,   # Circuit fault diagnosis
-            "S1.2.1": 0.30,   # Customer communication
-            "S1.2.3": 0.22,   # Conflict resolution
-            "S6.1.0": 0.45,   # Business operations
-            "S6.1.1": 0.81,   # Basic bookkeeping
-            "S2.1.0": 0.51,   # Agricultural oversight
-            "S2.1.1": 0.55,   # Produce grading
-            "S3.1.0": 0.62,   # Materials handling
-            "S3.2.1": 0.40,   # Electrical wiring
-            "S1.4.0": 0.25,   # Teaching
-            "S4.1.0": 0.35,   # Basic patient care
-        }
-        return ESCO_TO_FREY.get(taxonomy_id, 0.50)  # default: moderate
+        if not taxonomy_id:
+            return 0.50
+
+        # 1. ESCO direct
+        if taxonomy_id in cls.ESCO_TO_FREY:
+            return cls.ESCO_TO_FREY[taxonomy_id]
+
+        # 2/3. ISCO (4-digit or major-group fallback)
+        # Accept both bare "7421" and prefixed "ISCO-7421" / "ISCO/7421"
+        clean = taxonomy_id.split("/")[-1].split("-")[-1].strip()
+        if clean.isdigit() and 1 <= len(clean) <= 4:
+            isco_score = cls.get_score_by_isco(clean)
+            if isco_score is not None:
+                return isco_score
+
+        # 4. Default
+        return 0.50
+
+    # ── Internals ─────────────────────────────────────────────────────────────
+
+    @classmethod
+    def _ensure_loaded(cls) -> None:
+        if cls._soc_cache is None:
+            cls._load()
 
     @classmethod
     def _load(cls) -> None:
         if not cls.SCORES_PATH.exists():
             logger.warning("Frey-Osborne scores not found — run seed_data.py")
-            cls._cache = {}
+            cls._soc_cache = {}
+            cls._isco_cache = {}
+            cls._major_group_cache = {}
             return
+
         with open(cls.SCORES_PATH, encoding="utf-8") as f:
             data = json.load(f)
-        cls._cache = {s["onet_soc"]: s["probability"] for s in data.get("scores", [])}
+
+        cls._soc_cache = {
+            s["onet_soc"]: s["probability"]
+            for s in data.get("scores", [])
+            if "onet_soc" in s and "probability" in s
+        }
+
+        # Strip helper keys (those starting with "_") from ISCO maps.
+        raw_isco = data.get("isco_scores", {}) or {}
+        cls._isco_cache = {
+            k: v for k, v in raw_isco.items()
+            if not k.startswith("_") and isinstance(v, (int, float))
+        }
+
+        raw_groups = data.get("isco_major_group_means", {}) or {}
+        cls._major_group_cache = {
+            k: v for k, v in raw_groups.items()
+            if not k.startswith("_") and isinstance(v, (int, float))
+        }
+
+        logger.info(
+            "Frey-Osborne loaded: %d SOC scores, %d ISCO 4-digit, %d major-group means.",
+            len(cls._soc_cache), len(cls._isco_cache), len(cls._major_group_cache),
+        )
 
 
 # ── Calibration Engine ────────────────────────────────────────────────────────

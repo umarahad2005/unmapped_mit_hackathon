@@ -12,6 +12,12 @@ jsonschema==4.23.0
 # ── AI — Gemini (Google) ──────────────────────────────────────────────────────
 google-generativeai==0.8.0
 
+# ── AI — Gemini ADK (talent + course agents) ─────────────────────────────────
+# Optional: when installed, the /api/jobs/find and /api/courses/find routes
+# perform live Google Search grounding via Gemini. When not installed, both
+# routes transparently fall back to the curated lists in agent/adk/fallback_data.py.
+google-adk==1.0.0
+
 # ── Graph engine ──────────────────────────────────────────────────────────────
 networkx==3.3
 

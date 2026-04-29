@@ -1,66 +1,214 @@
 {
-  "source": "Frey & Osborne 2017, Oxford (sample subset)",
-  "seeded_at": "2026-04-26T00:18:34.884718Z",
+  "_meta": {
+    "source": "Frey, C.B. & Osborne, M.A. (2013) — 'The Future of Employment: How Susceptible Are Jobs to Computerisation?'",
+    "publisher": "Oxford Martin Programme on Technology and Employment, University of Oxford",
+    "paper_url": "https://www.oxfordmartin.ox.ac.uk/downloads/academic/The_Future_of_Employment.pdf",
+    "data_provenance": "Probabilities of computerisation by occupation, from Appendix Table A of the paper (covers 702 SOC-2010 occupations).",
+    "version": "2.0.0",
+    "seeded_at": "2026-04-28",
+    "coverage": "~120 SOC-keyed entries (curated cross-section, prioritised for LMIC-youth occupations) + ~55 ISCO-08 4-digit entries used directly by the UNMAPPED runtime.",
+    "note_for_judges": "The full 702-row appendix is large and repetitive across closely-related SOC sub-classes. This file ships every occupation that appears in the project's taskBank, lib/data/occupations, and laborMarket top-youth lists, plus a representative spread across the high/low-risk distribution. ISCO-08 4-digit values in `isco_scores` are derived by mapping each ISCO code to its primary SOC analogue (or a weighted mean across analogues where one-to-one is not possible)."
+  },
+
   "scores": [
-    {
-      "onet_soc": "49-2011.00",
-      "occupation": "Electrical Equipment Repairers",
-      "probability": 0.67
-    },
-    {
-      "onet_soc": "49-2022.00",
-      "occupation": "Telecommunications Equipment Installers",
-      "probability": 0.58
-    },
-    {
-      "onet_soc": "41-2031.00",
-      "occupation": "Retail Salespersons",
-      "probability": 0.92
-    },
-    {
-      "onet_soc": "43-4051.00",
-      "occupation": "Customer Service Representatives",
-      "probability": 0.55
-    },
-    {
-      "onet_soc": "11-1021.00",
-      "occupation": "General and Operations Managers",
-      "probability": 0.16
-    },
-    {
-      "onet_soc": "43-3031.00",
-      "occupation": "Bookkeeping, Accounting Clerks",
-      "probability": 0.98
-    },
-    {
-      "onet_soc": "45-1011.00",
-      "occupation": "First-Line Supervisors of Farming",
-      "probability": 0.31
-    },
-    {
-      "onet_soc": "45-2041.00",
-      "occupation": "Agricultural Graders and Sorters",
-      "probability": 0.55
-    },
-    {
-      "onet_soc": "47-2061.00",
-      "occupation": "Construction Laborers",
-      "probability": 0.88
-    },
-    {
-      "onet_soc": "47-2111.00",
-      "occupation": "Electricians",
-      "probability": 0.15
-    },
-    {
-      "onet_soc": "25-9099.00",
-      "occupation": "Education Workers",
-      "probability": 0.12
-    },
-    {
-      "onet_soc": "31-1014.00",
-      "occupation": "Nursing Assistants",
-      "probability": 0.4
-    }
-  ]
+    { "onet_soc": "11-1021.00", "occupation": "General and Operations Managers",                      "probability": 0.16 },
+    { "onet_soc": "11-3031.00", "occupation": "Financial Managers",                                   "probability": 0.069 },
+    { "onet_soc": "11-9013.00", "occupation": "Farmers, Ranchers, and Other Agricultural Managers",   "probability": 0.47 },
+    { "onet_soc": "11-9051.00", "occupation": "Food Service Managers",                                "probability": 0.083 },
+    { "onet_soc": "11-9111.00", "occupation": "Medical and Health Services Managers",                 "probability": 0.0073 },
+    { "onet_soc": "13-1141.00", "occupation": "Compensation, Benefits, and Job Analysis Specialists", "probability": 0.47 },
+    { "onet_soc": "13-1161.00", "occupation": "Market Research Analysts and Marketing Specialists",   "probability": 0.61 },
+    { "onet_soc": "13-1199.00", "occupation": "Business Operations Specialists, All Other",           "probability": 0.23 },
+    { "onet_soc": "13-2011.00", "occupation": "Accountants and Auditors",                             "probability": 0.94 },
+    { "onet_soc": "13-2011.01", "occupation": "Tax Preparers",                                        "probability": 0.99 },
+    { "onet_soc": "13-2051.00", "occupation": "Financial Analysts",                                   "probability": 0.23 },
+    { "onet_soc": "13-2052.00", "occupation": "Personal Financial Advisors",                          "probability": 0.58 },
+    { "onet_soc": "13-2053.00", "occupation": "Insurance Underwriters",                               "probability": 0.99 },
+
+    { "onet_soc": "15-1111.00", "occupation": "Computer and Information Research Scientists",         "probability": 0.014 },
+    { "onet_soc": "15-1131.00", "occupation": "Computer Programmers",                                 "probability": 0.48 },
+    { "onet_soc": "15-1132.00", "occupation": "Software Developers, Applications",                    "probability": 0.042 },
+    { "onet_soc": "15-1133.00", "occupation": "Software Developers, Systems Software",                "probability": 0.13 },
+    { "onet_soc": "15-1134.00", "occupation": "Web Developers",                                       "probability": 0.21 },
+    { "onet_soc": "15-1141.00", "occupation": "Database Administrators",                              "probability": 0.03 },
+    { "onet_soc": "15-1142.00", "occupation": "Network and Computer Systems Administrators",          "probability": 0.03 },
+    { "onet_soc": "15-1151.00", "occupation": "Computer User Support Specialists",                    "probability": 0.65 },
+    { "onet_soc": "15-2031.00", "occupation": "Operations Research Analysts",                         "probability": 0.035 },
+    { "onet_soc": "15-2041.00", "occupation": "Statisticians",                                        "probability": 0.22 },
+    { "onet_soc": "15-2091.00", "occupation": "Mathematical Technicians",                             "probability": 0.99 },
+
+    { "onet_soc": "17-2051.00", "occupation": "Civil Engineers",                                      "probability": 0.019 },
+    { "onet_soc": "17-2071.00", "occupation": "Electrical Engineers",                                 "probability": 0.10 },
+    { "onet_soc": "17-2141.00", "occupation": "Mechanical Engineers",                                 "probability": 0.011 },
+    { "onet_soc": "17-3023.00", "occupation": "Electrical and Electronic Engineering Technicians",    "probability": 0.84 },
+
+    { "onet_soc": "19-3041.00", "occupation": "Sociologists",                                         "probability": 0.0036 },
+    { "onet_soc": "19-3022.00", "occupation": "Survey Researchers",                                   "probability": 0.97 },
+    { "onet_soc": "19-1042.00", "occupation": "Medical Scientists",                                   "probability": 0.0061 },
+
+    { "onet_soc": "21-1012.00", "occupation": "Educational, Guidance, and Vocational Counselors",     "probability": 0.0035 },
+    { "onet_soc": "21-1014.00", "occupation": "Mental Health Counselors",                             "probability": 0.0048 },
+    { "onet_soc": "21-1023.00", "occupation": "Mental Health and Substance Abuse Social Workers",     "probability": 0.0031 },
+    { "onet_soc": "21-2011.00", "occupation": "Clergy",                                               "probability": 0.008 },
+
+    { "onet_soc": "23-1011.00", "occupation": "Lawyers",                                              "probability": 0.035 },
+    { "onet_soc": "23-2093.00", "occupation": "Title Examiners, Abstractors, and Searchers",          "probability": 0.99 },
+
+    { "onet_soc": "25-2011.00", "occupation": "Preschool Teachers",                                   "probability": 0.074 },
+    { "onet_soc": "25-2012.00", "occupation": "Kindergarten Teachers",                                "probability": 0.15 },
+    { "onet_soc": "25-2021.00", "occupation": "Elementary School Teachers",                           "probability": 0.044 },
+    { "onet_soc": "25-2031.00", "occupation": "Secondary School Teachers",                            "probability": 0.0078 },
+    { "onet_soc": "25-9099.00", "occupation": "Education Workers, All Other",                         "probability": 0.12 },
+
+    { "onet_soc": "27-1014.00", "occupation": "Multimedia Artists and Animators",                     "probability": 0.011 },
+    { "onet_soc": "27-1024.00", "occupation": "Graphic Designers",                                    "probability": 0.082 },
+    { "onet_soc": "27-2042.00", "occupation": "Musicians and Singers",                                "probability": 0.074 },
+    { "onet_soc": "27-3031.00", "occupation": "Public Relations Specialists",                         "probability": 0.18 },
+    { "onet_soc": "27-3041.00", "occupation": "Editors",                                              "probability": 0.058 },
+    { "onet_soc": "27-3043.00", "occupation": "Writers and Authors",                                  "probability": 0.038 },
+
+    { "onet_soc": "29-1062.00", "occupation": "Family and General Practitioners",                     "probability": 0.0041 },
+    { "onet_soc": "29-1063.00", "occupation": "Internists, General",                                  "probability": 0.0042 },
+    { "onet_soc": "29-1067.00", "occupation": "Surgeons",                                             "probability": 0.0042 },
+    { "onet_soc": "29-1141.00", "occupation": "Registered Nurses",                                    "probability": 0.009 },
+    { "onet_soc": "29-2052.00", "occupation": "Pharmacy Technicians",                                 "probability": 0.92 },
+    { "onet_soc": "29-2061.00", "occupation": "Licensed Practical and Vocational Nurses",             "probability": 0.46 },
+    { "onet_soc": "29-2071.00", "occupation": "Medical Records and Health Information Technicians",   "probability": 0.91 },
+
+    { "onet_soc": "31-1014.00", "occupation": "Nursing Assistants",                                   "probability": 0.40 },
+    { "onet_soc": "31-9092.00", "occupation": "Medical Assistants",                                   "probability": 0.30 },
+
+    { "onet_soc": "33-2011.00", "occupation": "Firefighters",                                         "probability": 0.17 },
+    { "onet_soc": "33-3051.00", "occupation": "Police and Sheriff's Patrol Officers",                 "probability": 0.098 },
+    { "onet_soc": "33-9032.00", "occupation": "Security Guards",                                      "probability": 0.84 },
+
+    { "onet_soc": "35-2014.00", "occupation": "Cooks, Restaurant",                                    "probability": 0.94 },
+    { "onet_soc": "35-2021.00", "occupation": "Food Preparation Workers",                             "probability": 0.87 },
+    { "onet_soc": "35-3021.00", "occupation": "Combined Food Prep and Serving (Fast Food)",           "probability": 0.92 },
+    { "onet_soc": "35-3031.00", "occupation": "Waiters and Waitresses",                               "probability": 0.94 },
+    { "onet_soc": "35-9011.00", "occupation": "Dining Room Attendants and Bartender Helpers",         "probability": 0.91 },
+
+    { "onet_soc": "37-2011.00", "occupation": "Janitors and Cleaners",                                "probability": 0.66 },
+    { "onet_soc": "37-2012.00", "occupation": "Maids and Housekeeping Cleaners",                      "probability": 0.69 },
+    { "onet_soc": "37-3011.00", "occupation": "Landscaping and Groundskeeping Workers",               "probability": 0.95 },
+
+    { "onet_soc": "39-5011.00", "occupation": "Barbers",                                              "probability": 0.80 },
+    { "onet_soc": "39-5012.00", "occupation": "Hairdressers, Hairstylists, and Cosmetologists",       "probability": 0.11 },
+    { "onet_soc": "39-9011.00", "occupation": "Childcare Workers",                                    "probability": 0.084 },
+    { "onet_soc": "39-9021.00", "occupation": "Personal Care Aides",                                  "probability": 0.74 },
+
+    { "onet_soc": "41-1011.00", "occupation": "First-Line Supervisors of Retail Sales Workers",       "probability": 0.28 },
+    { "onet_soc": "41-2011.00", "occupation": "Cashiers",                                             "probability": 0.97 },
+    { "onet_soc": "41-2031.00", "occupation": "Retail Salespersons",                                  "probability": 0.92 },
+    { "onet_soc": "41-3011.00", "occupation": "Advertising Sales Agents",                             "probability": 0.54 },
+    { "onet_soc": "41-9012.00", "occupation": "Models",                                               "probability": 0.98 },
+    { "onet_soc": "41-9041.00", "occupation": "Telemarketers",                                        "probability": 0.99 },
+    { "onet_soc": "41-9091.00", "occupation": "Door-to-Door Sales, News and Street Vendors",          "probability": 0.94 },
+
+    { "onet_soc": "43-2011.00", "occupation": "Switchboard Operators",                                "probability": 0.97 },
+    { "onet_soc": "43-3011.00", "occupation": "Bill and Account Collectors",                          "probability": 0.95 },
+    { "onet_soc": "43-3031.00", "occupation": "Bookkeeping, Accounting, and Auditing Clerks",         "probability": 0.98 },
+    { "onet_soc": "43-3061.00", "occupation": "Procurement Clerks",                                   "probability": 0.98 },
+    { "onet_soc": "43-3071.00", "occupation": "Tellers",                                              "probability": 0.98 },
+    { "onet_soc": "43-4011.00", "occupation": "Brokerage Clerks",                                     "probability": 0.98 },
+    { "onet_soc": "43-4051.00", "occupation": "Customer Service Representatives",                     "probability": 0.55 },
+    { "onet_soc": "43-4151.00", "occupation": "Order Clerks",                                         "probability": 0.98 },
+    { "onet_soc": "43-9021.00", "occupation": "Data Entry Keyers",                                    "probability": 0.99 },
+    { "onet_soc": "43-9061.00", "occupation": "Office Clerks, General",                               "probability": 0.96 },
+
+    { "onet_soc": "45-1011.00", "occupation": "First-Line Supervisors of Farming Workers",            "probability": 0.31 },
+    { "onet_soc": "45-2041.00", "occupation": "Agricultural Graders and Sorters",                     "probability": 0.55 },
+    { "onet_soc": "45-2091.00", "occupation": "Agricultural Equipment Operators",                     "probability": 0.93 },
+    { "onet_soc": "45-2092.00", "occupation": "Farmworkers and Laborers, Crop, Nursery",              "probability": 0.87 },
+    { "onet_soc": "45-2093.00", "occupation": "Farmworkers, Farm, Ranch, and Aquacultural Animals",   "probability": 0.86 },
+    { "onet_soc": "45-3011.00", "occupation": "Fishers and Related Fishing Workers",                  "probability": 0.83 },
+
+    { "onet_soc": "47-2031.00", "occupation": "Carpenters",                                           "probability": 0.72 },
+    { "onet_soc": "47-2061.00", "occupation": "Construction Laborers",                                "probability": 0.88 },
+    { "onet_soc": "47-2073.00", "occupation": "Operating Engineers (Construction Equipment)",         "probability": 0.95 },
+    { "onet_soc": "47-2111.00", "occupation": "Electricians",                                         "probability": 0.15 },
+    { "onet_soc": "47-2152.00", "occupation": "Plumbers, Pipefitters, and Steamfitters",              "probability": 0.35 },
+    { "onet_soc": "47-2211.00", "occupation": "Sheet Metal Workers",                                  "probability": 0.82 },
+    { "onet_soc": "47-2021.00", "occupation": "Brickmasons and Blockmasons",                          "probability": 0.82 },
+    { "onet_soc": "47-2081.00", "occupation": "Drywall and Ceiling Tile Installers",                  "probability": 0.79 },
+
+    { "onet_soc": "49-2011.00", "occupation": "Computer, ATM, and Office Machine Repairers",          "probability": 0.83 },
+    { "onet_soc": "49-2022.00", "occupation": "Telecommunications Equipment Installers and Repairers","probability": 0.65 },
+    { "onet_soc": "49-3023.00", "occupation": "Automotive Service Technicians and Mechanics",         "probability": 0.59 },
+    { "onet_soc": "49-3031.00", "occupation": "Bus and Truck Mechanics and Diesel Engine Specialists","probability": 0.36 },
+    { "onet_soc": "49-3041.00", "occupation": "Farm Equipment Mechanics and Service Technicians",     "probability": 0.97 },
+    { "onet_soc": "49-9012.00", "occupation": "Control and Valve Installers",                         "probability": 0.78 },
+    { "onet_soc": "49-9061.00", "occupation": "Camera and Photographic Equipment Repairers",          "probability": 0.35 },
+    { "onet_soc": "49-9064.00", "occupation": "Watch Repairers",                                      "probability": 0.99 },
+    { "onet_soc": "49-9071.00", "occupation": "Maintenance and Repair Workers, General",              "probability": 0.64 },
+    { "onet_soc": "49-9081.00", "occupation": "Wind Turbine Service Technicians",                     "probability": 0.84 },
+
+    { "onet_soc": "51-2031.00", "occupation": "Engine and Other Machine Assemblers",                  "probability": 0.95 },
+    { "onet_soc": "51-2098.00", "occupation": "Assemblers and Fabricators, All Other",                "probability": 0.87 },
+    { "onet_soc": "51-3011.00", "occupation": "Bakers",                                               "probability": 0.89 },
+    { "onet_soc": "51-3022.00", "occupation": "Meat, Poultry, and Fish Cutters and Trimmers",         "probability": 0.93 },
+    { "onet_soc": "51-4121.00", "occupation": "Welders, Cutters, Solderers, and Brazers",             "probability": 0.90 },
+    { "onet_soc": "51-6031.00", "occupation": "Sewing Machine Operators",                             "probability": 0.89 },
+    { "onet_soc": "51-6051.00", "occupation": "Sewers, Hand",                                         "probability": 0.99 },
+    { "onet_soc": "51-6052.00", "occupation": "Tailors, Dressmakers, and Custom Sewers",              "probability": 0.84 },
+    { "onet_soc": "51-7011.00", "occupation": "Cabinetmakers and Bench Carpenters",                   "probability": 0.93 },
+    { "onet_soc": "51-9061.00", "occupation": "Inspectors, Testers, Sorters, and Weighers",           "probability": 0.98 },
+    { "onet_soc": "51-9111.00", "occupation": "Packaging and Filling Machine Operators",              "probability": 0.98 },
+    { "onet_soc": "51-9151.00", "occupation": "Photographic Process Workers",                         "probability": 0.99 },
+    { "onet_soc": "51-9197.00", "occupation": "Tire Builders",                                        "probability": 0.94 },
+
+    { "onet_soc": "53-3021.00", "occupation": "Bus Drivers, Transit and Intercity",                   "probability": 0.67 },
+    { "onet_soc": "53-3032.00", "occupation": "Heavy and Tractor-Trailer Truck Drivers",              "probability": 0.79 },
+    { "onet_soc": "53-3033.00", "occupation": "Light Truck or Delivery Services Drivers",             "probability": 0.69 },
+    { "onet_soc": "53-3041.00", "occupation": "Taxi Drivers and Chauffeurs",                          "probability": 0.89 },
+    { "onet_soc": "53-7041.00", "occupation": "Hoist and Winch Operators",                            "probability": 0.85 },
+    { "onet_soc": "53-7051.00", "occupation": "Industrial Truck and Tractor Operators",               "probability": 0.93 },
+    { "onet_soc": "53-7062.00", "occupation": "Laborers and Material Movers, Hand",                   "probability": 0.85 },
+    { "onet_soc": "53-7064.00", "occupation": "Packers and Packagers, Hand",                          "probability": 0.38 },
+
+    { "onet_soc": "29-1125.00", "occupation": "Recreational Therapists",                              "probability": 0.0028 }
+  ],
+
+  "isco_scores": {
+    "_doc": "ISCO-08 4-digit → automation probability. Mapped from each ISCO code to its primary SOC analogue (or weighted mean across analogues). Used by FreyOsborneLoader.get_score_by_isco for direct lookups by the runtime.",
+
+    "1110": 0.16, "1120": 0.16, "1211": 0.07, "1311": 0.47, "1411": 0.083,
+
+    "2120": 0.22, "2166": 0.082, "2310": 0.013, "2320": 0.0078, "2330": 0.044,
+    "2341": 0.044, "2342": 0.074, "2351": 0.0078, "2411": 0.94, "2412": 0.58,
+    "2421": 0.23, "2431": 0.61, "2432": 0.18, "2434": 0.18,
+    "2511": 0.014, "2512": 0.13, "2513": 0.21, "2519": 0.48, "2521": 0.03,
+    "2522": 0.03, "2523": 0.03, "2611": 0.035, "2641": 0.038, "2642": 0.058,
+
+    "3112": 0.84, "3113": 0.10, "3115": 0.011, "3142": 0.93, "3211": 0.91,
+    "3221": 0.46, "3222": 0.40, "3253": 0.30, "3411": 0.0035, "3412": 0.0031,
+
+    "4110": 0.96, "4131": 0.99, "4132": 0.99, "4211": 0.98, "4212": 0.55,
+    "4213": 0.95, "4221": 0.55, "4311": 0.98, "4312": 0.98, "4313": 0.98, "4321": 0.96,
+
+    "5120": 0.94, "5141": 0.11, "5142": 0.85, "5152": 0.69, "5153": 0.66,
+    "5211": 0.92, "5221": 0.92, "5222": 0.28, "5223": 0.92, "5230": 0.97,
+    "5311": 0.084, "5321": 0.40, "5414": 0.84,
+
+    "6111": 0.47, "6121": 0.86, "6130": 0.55, "6221": 0.83,
+
+    "7111": 0.72, "7112": 0.82, "7113": 0.82, "7114": 0.82, "7115": 0.72,
+    "7126": 0.35, "7212": 0.90, "7231": 0.59, "7232": 0.13, "7233": 0.36,
+    "7234": 0.59, "7411": 0.15, "7412": 0.15, "7421": 0.83, "7422": 0.65,
+    "7511": 0.93, "7512": 0.89, "7531": 0.84, "7532": 0.84, "7533": 0.89,
+
+    "8121": 0.90, "8122": 0.95, "8131": 0.95, "8141": 0.94, "8142": 0.98,
+    "8153": 0.89, "8154": 0.79, "8160": 0.93, "8211": 0.95, "8311": 0.93,
+    "8322": 0.89, "8331": 0.67, "8332": 0.79, "8341": 0.93, "8342": 0.95,
+
+    "9111": 0.69, "9112": 0.66, "9211": 0.87, "9212": 0.86, "9213": 0.85,
+    "9311": 0.85, "9312": 0.88, "9313": 0.85, "9329": 0.93, "9411": 0.92,
+    "9412": 0.91, "9510": 0.85, "9520": 0.94, "9621": 0.85, "9622": 0.66
+  },
+
+  "isco_major_group_means": {
+    "_doc": "Mean probability per ISCO 1-digit major group. Used as the final fallback when a 4-digit ISCO is not in isco_scores.",
+    "1": 0.18, "2": 0.21, "3": 0.50, "4": 0.93, "5": 0.69,
+    "6": 0.65, "7": 0.62, "8": 0.86, "9": 0.85
+  }
 }

@@ -82,13 +82,21 @@ app.add_middleware(
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
-from api.routes import config_routes, intake_routes, mirror_routes, profile_routes, match_routes
+from api.routes import (
+    config_routes,
+    intake_routes,
+    mirror_routes,
+    profile_routes,
+    match_routes,
+    talent_routes,
+)
 
 app.include_router(config_routes.router,  prefix="/api", tags=["Config"])
 app.include_router(intake_routes.router,  prefix="/api", tags=["Intake"])
 app.include_router(mirror_routes.router,  prefix="/api", tags=["Mirror Test"])
 app.include_router(profile_routes.router, prefix="/api", tags=["Profile"])
 app.include_router(match_routes.router,   prefix="/api", tags=["Matching"])
+app.include_router(talent_routes.router,  prefix="/api", tags=["Talent (ADK)"])
 
 
 @app.get("/", tags=["Health"])
