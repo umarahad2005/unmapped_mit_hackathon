@@ -1,0 +1,28 @@
+name: Deploy to FastAPI Cloud
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install FastAPI CLI
+        run: pip install "fastapi[standard]" fastapi-cloud-cli
+
+      - name: Deploy to FastAPI Cloud
+        working-directory: unmapped_fast_api
+        run: fastapi deploy
+        env:
+          FASTAPI_CLOUD_TOKEN: ${{ secrets.FASTAPI_CLOUD_TOKEN }}
